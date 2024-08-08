@@ -1,0 +1,136 @@
+body {
+  font-family: "Arial", sans-serif;
+  text-align: center;
+  background-image: url('../home/img/seat.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+h1 {
+  margin-bottom: 50px;
+  font-family: "Arial", sans-serif;
+  font-weight: bold;
+  font-size: 36px;
+  text-decoration-line: underline;
+  color: #ffffff;
+}
+
+.ticket-box {
+  float: right;
+  width: 300px;
+  padding: 30px;
+  border: 1px solid #e2e2e2;
+  border-radius: 10px;
+  margin-top: 7%;
+  margin-right: 15%;
+  background-color: #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.ticket-box h2 {
+  margin-top: 0;
+  margin-bottom: 25px;
+  font-size: 18px;
+  text-decoration: underline;
+  color: #333333;
+}
+
+.ticket-info {
+  text-align: left;
+  padding-inline: 10px;
+  color: #333333;
+}
+
+.btn {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: "Arial", sans-serif;
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+.btn:hover {
+  background-color: #3795fa;
+}
+
+.seat-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+  border: 1px solid #cccccc;
+  background: #ffffff;
+  border-radius: 10px;
+  margin-left: 12%;
+  width: 300px;
+  padding: 2px;
+}
+
+.row {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.drv {
+  margin-left: 40%;
+}
+
+.seat {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  margin: 5px;
+  background-color: #c5c5c5;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: background-color 0.1s;
+}
+
+.seat:hover {
+  background-color: #b4d1ea;
+}
+
+.seat.selected {
+  background-color: #64b1d0 !important;
+}
+
+.seat::before {
+  content: attr(data-price);
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #000;
+  color: #fff;
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 14px;
+  white-space: nowrap;
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0.3s, opacity 0.3s;
+}
+
+.seat:hover::before {
+  visibility: visible;
+  opacity: 1;
+}
+
+.occupied {
+  width: 40px;
+  height: 40px;
+  margin: 5px;
+  background-color: #c5c5c5;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: background-color 0.1s;
+  background-color: #d12744;
+  cursor: not-allowed;
+}

@@ -1,0 +1,219 @@
+/* Global styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-image: url('../images/paymentimg.jpeg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  font-family: "Roboto", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  background-color: #f7f7f7;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* Booking details section styles */
+.booking-details {
+  padding: 50px 0;
+}
+
+.booking-details h2 {
+  font-size: 36px;
+  margin-bottom: 20px;
+  text-align: center;
+  text-transform: uppercase;
+  color: #336699;
+  font-family: "Montserrat", sans-serif;
+}
+
+.booking-column,
+.customer-column,
+.payment-column {
+  flex-basis: 33.33%;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.8);
+  /* Transparent background */
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.booking-column {
+  background-color: rgba(227, 227, 227, 0.9); /* Light blue */
+}
+.customer-column {
+  background-color: rgba(205, 205, 205, 0.9); /* Light purple */
+}
+
+.payment-column {
+  background-color: rgba(227, 227, 227, 0.9); /* Light green */
+}
+
+
+.customer-column form {
+  margin-top: 20px;
+}
+
+.customer-column .form-group {
+  margin-bottom: 20px;
+}
+
+.customer-column label {
+  display: block;
+  margin-bottom: 5px;
+  color: #333;
+  font-weight: bold;
+}
+
+.customer-column input[type="text"],
+.customer-column input[type="number"],
+.payment-column select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  color: #333;
+}
+
+.payment-column ul {
+  list-style: none;
+  margin-bottom: 20px;
+}
+
+.payment-column button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: block;
+  margin: 0 auto;
+}
+
+.payment-column button:hover {
+  background-color: #0056b3;
+}
+
+.back-button {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.back-button a {
+  display: inline-block;
+  padding: 12px 24px;
+  background-color: #007bff;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.back-button a:hover {
+  background-color: #0056b3;
+}
+
+.popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 600px;
+  background-color: #333;
+  color: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  font-family: "Roboto", Arial, sans-serif;
+  font-size: 16px;
+  z-index: 9999;
+}
+
+.popup .qr-code {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  text-align: center;
+  height: 300px;
+  /* Adjust the height as needed */
+}
+
+.popup .qr-code img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 24px;
+  cursor: pointer;
+  color: #f8eded;
+  transition: color 0.3s;
+}
+
+.close-button:hover {
+  color: #ccc;
+}
+
+.popup.show {
+  display: block;
+}
+
+.popup h2 {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 20px;
+  margin-bottom: 35px;
+}
+
+.popup label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.popup input[type="text"],
+.popup input[type="number"] {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.popup button {
+  display: block;
+  margin: 0 auto;
+  width: 50%;
+  padding: 12px 24px;
+  margin-top: 20px;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.popup button:hover {
+  background-color: #0056b3;
+}

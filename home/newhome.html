@@ -1,0 +1,54 @@
+<html>
+<head>
+    <title>MyBus</title>
+    <link rel="stylesheet" href="newhome.css">
+</head>
+<body>
+    <div class="banner"> 
+        <div class="navbar">
+            <img src="./img/logo.png" class="logo"> 
+            <ul>
+                <li><a href="#">HOME</a></li>
+                <li><a href="../index/index.php">MAKE BOOKING</a></li>
+                <li><a href="">CHECK TICKETS</a></li>
+                <li><a id="user-email" style="display: none;"></a></li>
+            </ul>
+        </div>
+        <div class="content">
+            <h1>BOOK YOUR TICKET</h1>
+            <p>Your Perfect Travel Partner. Now book your Bus Ticket easily with myBus.</p>
+            <div>
+                <button type="button" onclick="redirectToIndex()"><span ></span>BOOK NOW</button>
+            </div>
+        </div>
+    </div>
+ 
+    <script>
+        function redirectToIndex() {
+         window.location.href = "../index/index.php";
+        }
+        function isLoggedIn() {
+            var isLoggedIn = sessionStorage.getItem('isLoggedIn');
+            return isLoggedIn === 'true';
+        }
+
+        function displayUserEmail() {
+            var userEmail = sessionStorage.getItem('userEmail');
+    var userEmailElem = document.getElementById('user-email');
+    if (userEmail) {
+        userEmailElem.style.display = 'block';
+        userEmailElem.textContent = userEmail;
+    } else {
+        userEmailElem.style.display = 'none';
+    }
+}
+
+        // Call the function when the page loads
+        window.onload = function() {
+            displayUserEmail();
+        };
+    </script>
+
+  
+</body>
+</html>
