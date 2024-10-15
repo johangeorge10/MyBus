@@ -1,7 +1,5 @@
 <?php
-// session_start();
-// $D_Date1 = isset($_SESSION['date']) ? $_SESSION['date'] : '2024-10-17';
-// Retrieve data from the POST request
+// session_start(); // Uncomment this if you need session management
 $busNumber = isset($_POST['bus_number']) ? $_POST['bus_number'] : 'Default Bus Number';
 $busName = isset($_POST['busname']) ? $_POST['busname'] : 'ABC Bus';
 $fromLocation = isset($_POST['from']) ? $_POST['from'] : 'City A';
@@ -36,35 +34,35 @@ $totalSeats = isset($_POST['totalSeats']) ? $_POST['totalSeats'] : '';
             <li>Departure Time: <?php echo $departTime; ?></li>
             <li>Arrival Time: <?php echo $arrTime; ?></li>
             <li>Price: $<?php echo $totalPrice; ?></li>
-            <li>seats :<?php echo $seats; ?></li>
-            <li>total seats :<?php echo $totalSeats; ?></li>
-            <li>Date :<?php echo $D_Date; ?></li>
-            <!-- <li>Date 2 :<?php echo $D_Date1; ?></li> -->
+            <li>Seats: <?php echo $seats; ?></li>
+            <li>Total Seats: <?php echo $totalSeats; ?></li>
+            <li>Date: <?php echo $D_Date; ?></li>
           </ul>
         </div>
 
         <div class="customer-column">
           <h2>Customer Information</h2>
-          <form>
+          <form id="customer-form">
             <div class="form-group">
               <label for="name">Name</label>
-              <input type="text" id="name" name="name" placeholder="Enter your name">
+              <input type="text" id="name" name="name" placeholder="Enter your name" required>
             </div>
             <div class="form-group">
               <label for="age">Age</label>
-              <input type="number" id="age" name="age" placeholder="Enter your age">
+              <input type="number" id="age" name="age" placeholder="Enter your age" required>
             </div>
             <div class="form-group">
               <label for="phone">Phone Number</label>
-              <input type="text" id="phone" name="phone" placeholder="Enter your phone number">
+              <input type="text" id="phone" name="phone" placeholder="Enter your phone number" required>
             </div>
+            <button type="submit">Save Information</button>
           </form>
         </div>
 
         <div class="payment-column">
           <h2>Payment Method</h2>
           <div class="form-group">
-            <select id="payment-method" name="payment-method">
+            <select id="payment-method" name="payment-method" required>
               <option value="" disabled selected>Select Payment Method</option>
               <option value="credit-card">Credit Card</option>
               <option value="gpay">GPay</option>
@@ -81,6 +79,7 @@ $totalSeats = isset($_POST['totalSeats']) ? $_POST['totalSeats'] : '';
       </div>
     </section>
   </main>
+  
   <div id="popup" class="popup">
     <span class="close-button">&times;</span>
     <h2 id="payment-method-heading">Payment Method</h2>
@@ -104,7 +103,7 @@ $totalSeats = isset($_POST['totalSeats']) ? $_POST['totalSeats'] : '';
       </div>
     </form>
     <div class="qr-code"></div>
-    <form action="../payment/sucessfull.html">
+    <form action="../payment/successful.html">
       <button type="submit" class="qr-btn">Pay Now</button>
     </form>
   </div>
@@ -112,6 +111,7 @@ $totalSeats = isset($_POST['totalSeats']) ? $_POST['totalSeats'] : '';
   <script>
     // Get the "Proceed to Payment" button element
     const proceedButton = document.getElementById('proceed-btn');
+    const customerForm = document.getElementById('customer-form');
 
     // Get the popup element
     const popup = document.querySelector('.popup');
@@ -119,9 +119,37 @@ $totalSeats = isset($_POST['totalSeats']) ? $_POST['totalSeats'] : '';
     // Get the close button element
     const closeButton = document.querySelector('.close-button');
 
+    // Add event listener to the customer form submission
+    customerForm.addEventListener('submit', (e) => {
+      e.preventDefault(); // Prevent the form from submitting
+
+      // Retrieve form values
+      const name = document.getElementById('name').value;
+      const age = document.getElementById('age').value;
+      const phone = document.getElementById('phone').value;
+
+      // Store in session storage
+      sessionStorage.setItem('name', name);
+      sessionStorage.setItem('age', age);
+      sessionStorage.setItem('phone', phone);
+      //storing php variables
+      sessionStorage.setItem('busNumber', '<?php echo $busNumber; ?>');
+      sessionStorage.setItem('busName', '<?php echo $busName; ?>');
+      sessionStorage.setItem('from', '<?php echo $fromLocation; ?>');
+      sessionStorage.setItem('to', '<?php echo $toLocation; ?>');
+      sessionStorage.setItem('departTime', '<?php echo $departTime; ?>');
+      sessionStorage.setItem('D_Date', '<?php echo $D_Date; ?>');
+      sessionStorage.setItem('arrTime', '<?php echo $arrTime; ?>');
+      sessionStorage.setItem('totalPrice', '<?php echo $totalPrice; ?>');
+      sessionStorage.setItem('seats', '<?php echo $seats; ?>');
+      sessionStorage.setItem('totalSeats', '<?php echo $totalSeats; ?>');
+
+      alert('Customer information saved successfully!');
+      // Optionally, you can redirect to another page or clear the form
+    });
+
     // Add event listener to the button
     proceedButton.addEventListener('click', () => {
-      // Get the selected payment method value
       const paymentMethod = document.getElementById('payment-method').value;
 
       // Show the popup based on the selected payment option
@@ -136,13 +164,9 @@ $totalSeats = isset($_POST['totalSeats']) ? $_POST['totalSeats'] : '';
 
         if (qrCodeImage) {
           document.getElementById('payment-method-heading').textContent = paymentMethod.toUpperCase();
-          // Clear any existing QR code image
           const qrCodeContainer = document.querySelector('.qr-code');
           qrCodeContainer.innerHTML = '';
-
-          // Append the new QR code image
           qrCodeContainer.appendChild(qrCodeImage);
-
           document.getElementById('credit-card-form').style.display = 'none';
           popup.classList.add('show');
         } else {
@@ -167,14 +191,12 @@ $totalSeats = isset($_POST['totalSeats']) ? $_POST['totalSeats'] : '';
 
     // Function to generate the QR code based on the selected payment method
     function generateQRCode(paymentMethod) {
-      // Object mapping payment methods to QR codes (replace with your own QR codes)
       const qrCodeMap = {
         'gpay': '../images/gpay_qr_code.png',
         'amazon-pay': '../images/amazon_pay_qr_code.png',
         'whatsapp-pay': '../images/whatsapp_pay_qr_code.png',
       };
 
-      // Check if a QR code exists for the selected payment method
       if (qrCodeMap.hasOwnProperty(paymentMethod)) {
         const qrCodeImage = new Image();
         qrCodeImage.src = qrCodeMap[paymentMethod];
