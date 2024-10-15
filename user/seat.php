@@ -169,7 +169,8 @@ function updateSelectedSeatsDisplay() {
             if (selectedSeats.length > 0) {
                 // Send selected seats to the customer page
                 const seats = selectedSeats.join(',');
-                window.location.href = `../index/customer.php?seats=${seats}&bus_number=${<?php echo json_encode($busNumber); ?>}&date=${<?php echo json_encode($departDate); ?>}&from=${<?php echo json_encode($fromLocation); ?>}&to=${<?php echo json_encode($toLocation); ?>}&busname=${<?php echo json_encode($busName); ?>}&deptime=${<?php echo json_encode($departTime); ?>}&arrtime=${<?php echo json_encode($arrTime); ?>}`;
+                const totalSeats = selectedSeats.length;
+                window.location.href = `../index/customer.php?seats=${seats}&totalSeats=${totalSeats}&bus_number=${<?php echo json_encode($busNumber); ?>}&date=${<?php echo json_encode($departDate); ?>}&from=${<?php echo json_encode($fromLocation); ?>}&to=${<?php echo json_encode($toLocation); ?>}&busname=${<?php echo json_encode($busName); ?>}&deptime=${<?php echo json_encode($departTime); ?>}&arrtime=${<?php echo json_encode($arrTime); ?>}`;
             } else {
                 alert('Please select at least one seat.');
             }
