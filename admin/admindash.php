@@ -13,7 +13,7 @@
   function newclick(id){
     var i;
 
-    for(i=1;i<=6;i++)
+    for(i=1;i<=7;i++)
     {
     document.getElementById('in-'+i).style.display='none';
     }
@@ -97,6 +97,9 @@ document.getElementById('in-'+id).style.display="block";
         <div class="set">
         <li><a class="atag" style="text-decoration:none" onclick="newclick(id)" id="6" >Employee details</a></li>
         </div>
+        <div class="set">
+        <li><a class="atag" style="text-decoration:none" onclick="newclick(id)" id="7" >Bus Schedule</a></li>
+        </div>
       </ul>
     </div>
   
@@ -126,6 +129,10 @@ document.getElementById('in-'+id).style.display="block";
 
     <?php
   include("empdetails.php");
+    ?>
+
+<?php
+  include("BusSchedule.php");
     ?>
 
   </div>

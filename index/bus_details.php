@@ -4,17 +4,47 @@ $username = "root";
 $password = "";
 $dbname = "mydb";
 
+// Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
+// Check connection
 if ($conn->connect_error) {
-  die("Connection failed: " . $conn->connect_error);
+    die("Connection failed: " . $conn->connect_error);
 }
+
+// Get form data
 $departDate = $_POST["date"];
 $from = $_POST["from"];
 $to = $_POST["to"];
 
-$sql = "SELECT * FROM businfo WHERE startingpoint='$from' AND destination='$to'";
-$result = $conn->query($sql);
+// SQL query to find buses based on the form input
+$sql = "SELECT DISTINCT
+            b.busid,
+            b.busname,
+            bs_from.location_name AS from_location,
+            bs_to.location_name AS to_location,
+            bs_from.bus_time AS deptime,
+            bs_to.bus_time AS arrtime
+        FROM
+            BusInfo b
+        INNER JOIN
+            BusSchedule bs_from ON b.busid = bs_from.busid
+        INNER JOIN
+            BusSchedule bs_to ON b.busid = bs_to.busid
+        WHERE
+            bs_from.location_name = ? AND
+            bs_to.location_name = ? AND
+            bs_from.stop_order < bs_to.stop_order";
+
+$stmt = $conn->prepare($sql);
+
+if (!$stmt) {
+    die("SQL error: " . $conn->error);
+}
+
+$stmt->bind_param("ss", $from, $to);
+$stmt->execute();
+$result = $stmt->get_result();
 ?>
 
 <!DOCTYPE html>
@@ -26,7 +56,7 @@ $result = $conn->query($sql);
       font-family: Arial, sans-serif;
       margin: 50px;
       background-color: #f5f5f5;
-      background-image: url("../home/img/bus.jpg"); /* Replace with your background image URL */
+      background-image: url("../home/img/bus.jpg");
       background-repeat: no-repeat;
       background-size: cover;
     }
@@ -47,11 +77,9 @@ $result = $conn->query($sql);
       background-color: transparent;
       border-radius: 5px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-      overflow: hidden; /* Ensure the border-radius is applied properly */
     }
 
-    th,
-    td {
+    th, td {
       padding: 10px;
       text-align: left;
       background-color: rgba(255, 255, 255, 0.8);
@@ -81,55 +109,18 @@ $result = $conn->query($sql);
     tr:hover td {
       color: #fff;
     }
-
-    tr.selected-row {
-      background-color: rgba(0, 123, 255, 0.6);
-      position: relative;
-    }
-
-    tr.selected-row::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      background-color: rgba(0, 123, 255, 0.2);
-      z-index: -1;
-    }
-
-    .btn {
-      padding: 10px 20px;
-      background-color: #007bff;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 14px;
-      text-transform: uppercase;
-      transition: background-color 0.3s ease;
-    }
-
-    .btn:hover {
-      background-color: #0056b3;
-    }
-
-    .no-buses {
-      text-align: center;
-      font-weight: bold;
-      color: #ff0000;
-    }
   </style>
 </head>
 <body>
+  <h1>Available Buses</h1>
+
   <?php if ($result->num_rows > 0): ?>
     <table>
       <tr>
-        <th>Bus Number</th>
+        <th>Bus ID</th>
+        <th>Bus Name</th>
         <th>From</th>
         <th>To</th>
-        <th>Departure Date</th>
         <th>Departure Time</th>
         <th>Arrival Time</th>
         <th>Select</th>
@@ -137,11 +128,11 @@ $result = $conn->query($sql);
       <?php while($row = $result->fetch_assoc()): ?>
         <tr>
           <td><?php echo $row["busid"]; ?></td>
-          <td><?php echo $row["startingpoint"]; ?></td>
-          <td><?php echo $row["destination"]; ?></td>
-          <td><?php echo $departDate; ?></td>
-          <td><?php echo $row["arrtime"]; ?></td>
+          <td><?php echo $row["busname"]; ?></td>
+          <td><?php echo $row["from_location"]; ?></td>
+          <td><?php echo $row["to_location"]; ?></td>
           <td><?php echo $row["deptime"]; ?></td>
+          <td><?php echo $row["arrtime"]; ?></td>
           <td>
             <form action="../user/seat.php" method="POST">
               <input type="hidden" name="bus_number" value="<?php echo $row["busid"]; ?>">
@@ -153,7 +144,13 @@ $result = $conn->query($sql);
       <?php endwhile; ?>
     </table>
   <?php else: ?>
-    <p>No buses available for the selected route.</p>
+    <p>No buses found for the selected route.</p>
   <?php endif; ?>
+
+  <?php
+  // Close connection
+  $stmt->close();
+  $conn->close();
+  ?>
 </body>
 </html>

@@ -10,28 +10,27 @@
 <body>
     <main>
         <div class="full">
-        <section class="search">
-            <div class="container">
-                <h1>Find Your Bus</h1>
-                <form method="post" action="bus_details.php">
-                    <div class="form-group">
-                        <label for="from">From</label>
-                        <input type="text" id="from" name="from" placeholder="Enter your starting point">
-                    </div>
-                    <div class="form-group">
-                        <label for="to">To</label>
-                        <input type="text" id="to" name="to" placeholder="Enter your destination">
-                    </div>
-                    <div class="form-group">
-                        <label for="date">Date</label>
-                       <!-- Modify the "date" input field -->
-                       <input type="date" id="date" name="date" value="<?php echo isset($_POST['date']) ? $_POST['date'] : ''; ?>">
-                    </div>
-                    <button type="submit">Search</button>
-                </form>
-            </div>
-        </section>
-    </div>
+            <section class="search">
+                <div class="container">
+                    <h1>Find Your Bus</h1>
+                    <form method="post" action="bus_details.php">
+                        <div class="form-group">
+                            <label for="from">From</label>
+                            <input type="text" id="from" name="from" placeholder="Enter your starting point" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="to">To</label>
+                            <input type="text" id="to" name="to" placeholder="Enter your destination" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="date">Date</label>
+                            <input type="date" id="date" name="date" min="<?php echo date('Y-m-d'); ?>" required>
+                        </div>
+                        <button type="submit">Search</button>
+                    </form>
+                </div>
+            </section>
+        </div>
     </main>
 </body>
 </html>

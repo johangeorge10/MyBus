@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/d22e378a1e.js" crossorigin="anonymous"></script>
+    <title>Bus Booking Page</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <main>
+        <div class="full">
+            <section class="search">
+                <div class="container">
+                    <h1>Find Your Bus</h1>
+                    <form method="post" action="">
+                        <div class="form-group">
+                            <label for="from">From</label>
+                            <input type="text" id="from" name="from" placeholder="Enter your starting point" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="to">To</label>
+                            <input type="text" id="to" name="to" placeholder="Enter your destination" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="date">Date</label>
+                            <input type="date" id="date" name="date" min="<?php echo date('Y-m-d'); ?>" required>
+                        </div>
+                        <button type="submit">Search</button>
+                    </form>
+                </div>
+            </section>
+
+            <?php
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                // Capture user input
+                $from = $_POST['from'];
+                $to = $_POST['to'];
+
+                // Database connection
+                $conn = new mysqli("localhost", "root", "", "mydb");
+
+                // Check connection
+                if ($conn->connect_error) {
+                    die("Connection failed: " . $conn->connect_error);
+                }
+
+                // SQL query to find buses between 'from' and 'to' locations
+                $sql = "SELECT DISTINCT
+                            b.busid,
+                            b.busname, 
+                            bs_from.location_name AS from_location,
+                            bs_to.location_name AS to_location
+                        FROM
+                            BusInfo b
+                        INNER JOIN
+                            BusSchedule bs_from ON b.busid = bs_from.busid
+                        INNER JOIN
+                            BusSchedule bs_to ON b.busid = bs_to.busid
+                        WHERE
+                            bs_from.location_name = ? AND
+                            bs_to.location_name = ? AND
+                            bs_from.stop_order < bs_to.stop_order";
+
+                // Prepare and check the statement
+                if ($stmt = $conn->prepare($sql)) {
+                    // Bind parameters to prevent SQL injection
+                    $stmt->bind_param("ss", $from, $to);
+
+                    // Execute the query
+                    $stmt->execute();
+                    $result = $stmt->get_result();
+
+                    // Check if any buses are found
+                    if ($result->num_rows > 0) {
+                        echo "<h2>Available Buses:</h2>";
+                        echo "<table border='1'>
+                                <tr>
+                                    <th>Bus ID</th>
+                                    <th>Bus Name</th>
+                                    <th>From</th>
+                                    <th>To</th>
+                                </tr>";
+                        // Display the bus details
+                        while ($row = $result->fetch_assoc()) {
+                            echo "<tr>
+                                    <td>{$row['busid']}</td>
+                                    <td>{$row['busname']}</td>
+                                    <td>{$row['from_location']}</td>
+                                    <td>{$row['to_location']}</td>
+                                  </tr>";
+                        }
+                        echo "</table>";
+                    } else {
+                        echo "<p>No buses found between these locations.</p>";
+                    }
+
+                    // Close statement
+                    $stmt->close();
+                } else {
+                    // If statement preparation fails, display the SQL error
+                    echo "Error in SQL query: " . $conn->error;
+                }
+
+                // Close connection
+                $conn->close();
+            }
+            ?>
+        </div>
+    </main>
+</body>
+</html>
