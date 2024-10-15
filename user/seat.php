@@ -85,6 +85,8 @@ $conn->close();
             <p><strong>Depart Time:</strong> <?php echo $departTime; ?></p>
             <p><strong>Arrival Time:</strong> <?php echo $arrTime; ?></p>
             <p><strong>Travel Time:</strong> <?php echo $travelTime; ?></p>
+            <p><strong>Total Number of Tickets:</strong> <span id="totalTickets">0</span></p>
+            <p><strong>Seats:</strong> <span id="selectedSeatsDisplay">NO SEATS BOOKED</span></p>
             <button class="btn" onclick="redirectToCustomerPage()">Book Selected Seats</button>
         </div>
     </div>
@@ -134,20 +136,33 @@ $conn->close();
         let selectedSeats = [];
 
         function toggleSeat(seatElement) {
-            const seatNumber = seatElement.dataset.seat;
-            seatElement.classList.toggle('selected');
-            if (selectedSeats.includes(seatNumber)) {
-                selectedSeats = selectedSeats.filter(seat => seat !== seatNumber);
-            } else {
-                selectedSeats.push(seatNumber);
-            }
-            updateTotalPrice();
-        }
+    const seatNumber = seatElement.dataset.seat;
+    seatElement.classList.toggle('selected');
+    if (selectedSeats.includes(seatNumber)) {
+        selectedSeats = selectedSeats.filter(seat => seat !== seatNumber);
+    } else {
+        selectedSeats.push(seatNumber);
+    }
+    updateTotalPrice();
+    updateSelectedSeatsDisplay(); // Update the display of selected seats
+}
 
-        function updateTotalPrice() {
-            const totalPrice = selectedSeats.length * seatPrice;
-            document.getElementById('totalPrice').innerText = totalPrice;
-        }
+function updateTotalPrice() {
+    const totalPrice = selectedSeats.length * seatPrice;
+    document.getElementById('totalPrice').innerText = totalPrice;
+}
+
+// New function to update the display of selected seats and count
+function updateSelectedSeatsDisplay() {
+    const totalTickets = selectedSeats.length;
+    document.getElementById('totalTickets').innerText = totalTickets;
+
+    if (totalTickets > 0) {
+        document.getElementById('selectedSeatsDisplay').innerText = selectedSeats.join(', ');
+    } else {
+        document.getElementById('selectedSeatsDisplay').innerText = ''; // Clear display if no seats are selected
+    }
+}
 
         function redirectToCustomerPage() {
             // Redirect to the booking page with selected seats
