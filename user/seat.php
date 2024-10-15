@@ -89,6 +89,19 @@ $conn->close();
             <p><strong>Seats:</strong> <span id="selectedSeatsDisplay">NO SEATS BOOKED</span></p>
             <button class="btn" onclick="redirectToCustomerPage()">Book Selected Seats</button>
         </div>
+        <!-- hidden form -->
+        <form id="bookingForm" action="../index/customer.php" method="POST" style="display: none;">
+        <input type="hidden" name="seats" id="seatsInput">
+        <input type="hidden" name="totalSeats" id="totalSeatsInput">
+        <input type="hidden" name="bus_number" value="<?php echo $busNumber; ?>">
+        <input type="hidden" name="date" value="<?php echo $departDate; ?>">
+        <input type="hidden" name="from" value="<?php echo $fromLocation; ?>">
+        <input type="hidden" name="to" value="<?php echo $toLocation; ?>">
+        <input type="hidden" name="busname" value="<?php echo $busName; ?>">
+        <input type="hidden" name="deptime" value="<?php echo $departTime; ?>">
+        <input type="hidden" name="arrtime" value="<?php echo $arrTime; ?>">
+        <input type="hidden" name="price" id="priceInput" value="<?php echo $price; ?>">
+        </form>
     </div>
 
     <div class="seat-layout">
@@ -164,17 +177,26 @@ function updateSelectedSeatsDisplay() {
     }
 }
 
-        function redirectToCustomerPage() {
-            // Redirect to the booking page with selected seats
-            if (selectedSeats.length > 0) {
-                // Send selected seats to the customer page
-                const seats = selectedSeats.join(',');
-                const totalSeats = selectedSeats.length;
-                window.location.href = `../index/customer.php?seats=${seats}&totalSeats=${totalSeats}&bus_number=${<?php echo json_encode($busNumber); ?>}&date=${<?php echo json_encode($departDate); ?>}&from=${<?php echo json_encode($fromLocation); ?>}&to=${<?php echo json_encode($toLocation); ?>}&busname=${<?php echo json_encode($busName); ?>}&deptime=${<?php echo json_encode($departTime); ?>}&arrtime=${<?php echo json_encode($arrTime); ?>}`;
-            } else {
-                alert('Please select at least one seat.');
-            }
-        }
+function redirectToCustomerPage() {
+    // Check if any seats are selected
+    if (selectedSeats.length > 0) {
+        // Join selected seats into a string
+        const seats = selectedSeats.join(',');
+        const totalSeats = selectedSeats.length;
+
+        // Set values in hidden form inputs
+        document.getElementById('seatsInput').value = seats;
+        document.getElementById('totalSeatsInput').value = totalSeats;
+        // total cost
+        const totalPrice = totalSeats * seatPrice;
+        document.getElementById('priceInput').value = totalPrice;
+
+        // Submit the hidden form
+        document.getElementById('bookingForm').submit();
+    } else {
+        alert('Please select at least one seat.');
+    }
+}
     </script>
 </body>
 </html>

@@ -1,6 +1,21 @@
+<?php
+// session_start();
+// $D_Date1 = isset($_SESSION['date']) ? $_SESSION['date'] : '2024-10-17';
+// Retrieve data from the POST request
+$busNumber = isset($_POST['bus_number']) ? $_POST['bus_number'] : 'Default Bus Number';
+$busName = isset($_POST['busname']) ? $_POST['busname'] : 'ABC Bus';
+$fromLocation = isset($_POST['from']) ? $_POST['from'] : 'City A';
+$toLocation = isset($_POST['to']) ? $_POST['to'] : 'City B';
+$departTime = isset($_POST['deptime']) ? $_POST['deptime'] : '9:00 AM';
+$D_Date = isset($_POST['date']) ? $_POST['date'] : '2024-10-18';
+$arrTime = isset($_POST['arrtime']) ? $_POST['arrtime'] : '12:00 PM';
+$totalPrice = isset($_POST['price']) ? $_POST['price'] : '';
+$seats = isset($_POST['seats']) ? $_POST['seats'] : '';
+$totalSeats = isset($_POST['totalSeats']) ? $_POST['totalSeats'] : '';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,11 +31,15 @@
         <div class="booking-column">
           <h2>Booked Details</h2>
           <ul>
-            <li>Bus Name: ABC Bus</li>
-            <li>Route: From City A to City B</li>
-            <li>Departure Time: 9:00 AM</li>
-            <li>Arrival Time: 12:00 PM</li>
-            <li>Price: $20</li>
+            <li>Bus Name: <?php echo $busName; ?></li>
+            <li>Route: From <?php echo $fromLocation; ?> to <?php echo $toLocation; ?></li>
+            <li>Departure Time: <?php echo $departTime; ?></li>
+            <li>Arrival Time: <?php echo $arrTime; ?></li>
+            <li>Price: $<?php echo $totalPrice; ?></li>
+            <li>seats :<?php echo $seats; ?></li>
+            <li>total seats :<?php echo $totalSeats; ?></li>
+            <li>Date :<?php echo $D_Date; ?></li>
+            <!-- <li>Date 2 :<?php echo $D_Date1; ?></li> -->
           </ul>
         </div>
 
@@ -73,8 +92,7 @@
       </div>
       <div class="form-group">
         <label for="cardholder-name">Cardholder Name</label>
-        <input type="text" id="cardholder-name" name="cardholder-name" placeholder="Enter the cardholder name"
-          required>
+        <input type="text" id="cardholder-name" name="cardholder-name" placeholder="Enter the cardholder name" required>
       </div>
       <div class="form-group">
         <label for="expiry-date">Expiry Date</label>
@@ -86,7 +104,7 @@
       </div>
     </form>
     <div class="qr-code"></div>
-    <form action="../payment/successful.html">
+    <form action="../payment/sucessfull.html">
       <button type="submit" class="qr-btn">Pay Now</button>
     </form>
   </div>
