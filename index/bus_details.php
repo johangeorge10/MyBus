@@ -17,7 +17,7 @@ $departDate = $_POST["date"];
 $from = $_POST["from"];
 $to = $_POST["to"];
 
-// SQL query to find buses based on the form input
+// First SQL query to find buses based on the form input (intermediate stops)
 $sql = "SELECT DISTINCT
             b.busid,
             b.busname,
@@ -45,6 +45,31 @@ if (!$stmt) {
 $stmt->bind_param("ss", $from, $to);
 $stmt->execute();
 $result = $stmt->get_result();
+
+if ($result->num_rows === 0) {
+    // Fallback query if no results found in BusSchedule (check BusInfo for direct routes)
+    $sql_fallback = "SELECT
+                        busid,
+                        busname,
+                        startingpoint AS from_location,
+                        destination AS to_location,
+                        deptime,
+                        arrtime
+                    FROM
+                        BusInfo
+                    WHERE
+                        startingpoint = ? AND destination = ?";
+
+    $stmt_fallback = $conn->prepare($sql_fallback);
+
+    if (!$stmt_fallback) {
+        die("SQL error: " . $conn->error);
+    }
+
+    $stmt_fallback->bind_param("ss", $from, $to);
+    $stmt_fallback->execute();
+    $result = $stmt_fallback->get_result();
+}
 ?>
 
 <!DOCTYPE html>
