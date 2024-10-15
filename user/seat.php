@@ -81,32 +81,47 @@ $conn->close();
   </div>
 
   <div class="seat-layout">
-    <?php
-    $bseats = [];
-    $conn = new mysqli($servername, $username, $password, $dbname);
-    $sql = "SELECT seat FROM booked WHERE busid='$busNumber'";
-    $result = mysqli_query($conn, $sql);
-    while ($row = mysqli_fetch_assoc($result)) {
-      $bseats[] = $row['seat'];
-    }
+  <?php
+  $bseats = [];
+  $conn = new mysqli($servername, $username, $password, $dbname);
+  $sql = "SELECT seat FROM booked WHERE busid='$busNumber'";
+  $result = mysqli_query($conn, $sql);
+  while ($row = mysqli_fetch_assoc($result)) {
+    $bseats[] = $row['seat'];
+  }
 
-    $rows = [25, 21, 17, 13, 5, 1]; // Row starting points
-    foreach ($rows as $rowStart) {
-      echo "<div class='row'>";
-      for ($i = $rowStart; $i < $rowStart + 5; $i++) {
-        if ($i <= $capacity && !in_array($i, $bseats)) {
-          echo "<div class='seat' data-seat='$i' onclick='toggleSeat(this)'>$i</div>";
-        } else {
-          echo "<div class='occupied'>$i</div>";
-        }
+  $seatsPerRow = 5; // Number of seats per row
+  $totalSeats = $capacity; // This is fetched from the businfo table
+  
+  // Create an array of seat numbers from 1 to totalSeats
+  $seatNumbers = range(1, $totalSeats); // Create an array from 1 to totalSeats
+
+  // Create a 2D array to hold the seat rows
+  $rows = array_chunk($seatNumbers, $seatsPerRow);
+
+  // Reverse the rows so that the last row is displayed first
+  $rows = array_reverse($rows);
+
+  foreach ($rows as $row) {
+    echo "<div class='row'>"; // Start a new row
+    foreach ($row as $i) {
+      // Display available or occupied seats
+      if (!in_array($i, $bseats)) {
+        echo "<div class='seat' data-seat='$i' onclick='toggleSeat(this)'>$i</div>";
+      } else {
+        echo "<div class='occupied'>$i</div>";
       }
-      echo "</div>";
     }
-    ?>
-    <div class="drv">
-      <img src="../images/drv.png" alt="driver seat">
-    </div>
+    echo "</div>"; // Close the row
+  }
+  ?>
+  <div class="drv">
+    <img src="../images/drv.png" alt="driver seat">
   </div>
+</div>
+
+
+
 
   <script>
     const seatPrice = <?php echo $price; ?>; // Base price per seat

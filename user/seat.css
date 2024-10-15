@@ -60,7 +60,7 @@ h1 {
 
 .seat-layout {
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse; /* Changed to column-reverse for bottom-to-top layout */
   align-items: center;
   margin-bottom: 20px;
   border: 1px solid #cccccc;
