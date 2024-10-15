@@ -1,4 +1,6 @@
 <?php
+session_start(); // Start the session
+
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -16,6 +18,11 @@ if ($conn->connect_error) {
 $departDate = $_POST["date"];
 $from = $_POST["from"];
 $to = $_POST["to"];
+
+// Save form data as session variables
+$_SESSION['departDate'] = $departDate;
+$_SESSION['from'] = $from;
+$_SESSION['to'] = $to;
 
 // First SQL query to find buses based on the form input (intermediate stops)
 $sql = "SELECT DISTINCT
@@ -152,20 +159,25 @@ if ($result->num_rows === 0) {
       </tr>
       <?php while($row = $result->fetch_assoc()): ?>
         <tr>
-          <td><?php echo $row["busid"]; ?></td>
-          <td><?php echo $row["busname"]; ?></td>
-          <td><?php echo $row["from_location"]; ?></td>
-          <td><?php echo $row["to_location"]; ?></td>
-          <td><?php echo $row["deptime"]; ?></td>
-          <td><?php echo $row["arrtime"]; ?></td>
-          <td>
-            <form action="../user/seat.php" method="POST">
-              <input type="hidden" name="bus_number" value="<?php echo $row["busid"]; ?>">
-              <input type="hidden" name="date" value="<?php echo $departDate; ?>">
-              <button class="btn" type="submit">Select Seat</button>
-            </form>
-          </td>
-        </tr>
+        <td><?php echo $row["busid"]; ?></td>
+        <td><?php echo $row["busname"]; ?></td>
+        <td><?php echo $row["from_location"]; ?></td>
+        <td><?php echo $row["to_location"]; ?></td>
+        <td><?php echo $row["deptime"]; ?></td>
+        <td><?php echo $row["arrtime"]; ?></td>
+        <td>
+          <form action="../user/seat.php" method="POST">
+            <input type="hidden" name="bus_number" value="<?php echo $row["busid"]; ?>">
+            <input type="hidden" name="date" value="<?php echo $departDate; ?>">
+            <input type="hidden" name="from" value="<?php echo $from; ?>">
+            <input type="hidden" name="to" value="<?php echo $to; ?>">
+            <input type="hidden" name="busname" value="<?php echo $row["busname"]; ?>">
+            <input type="hidden" name="deptime" value="<?php echo $row["deptime"]; ?>">
+            <input type="hidden" name="arrtime" value="<?php echo $row["arrtime"]; ?>">
+            <button class="btn" type="submit">Select Seat</button>
+          </form>
+        </td>
+      </tr>
       <?php endwhile; ?>
     </table>
   <?php else: ?>

@@ -23,6 +23,7 @@ if (isset($_POST['login'])) {
             $resultstring1 = $sql_result->fetch_row()[0];
 
             if ($resultstring1=="u") {
+                $_SESSION['email'] = $email;
                 echo '<script>alert("Login Success");window.open("../home/newhome.html","_self")</script';
             } else {
                 $_SESSION['email'] = $email; // Store the email in a session variable
