@@ -1,43 +1,61 @@
 <?php
 if (isset($_POST['login'])) {
-    session_start();
+    session_start(); // Start or resume the session
+
+    // Get the email and password from the login form
     $email = $_POST['email'];
-    $_SESSION['email'] = $email;
     $pass = $_POST['pass'];
-    if ($pass == "" || $email == "") {
-        echo "No fields cannot be Empty";
-        die;
+
+    // Basic validation for empty fields
+    if (empty($email) || empty($pass)) {
+        echo '<script>alert("Email and Password cannot be empty");window.open("login.php","_self")</script>';
+        die();
     }
 
+    // Create a database connection
     $conn = new mysqli("localhost", "root", "", "mydb");
-    $quer = "select * from accinfo where email='$email'";
+
+    // Check the connection
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    // Query to fetch user information
+    $quer = "SELECT * FROM accinfo WHERE email='$email'";
     $sql_result = mysqli_query($conn, $quer);
-    $row = mysqli_num_rows($sql_result);
-    if ($row > 0) {
-        $quer = "select password from accinfo where email='$email'";
+    $row_count = mysqli_num_rows($sql_result);
+
+    if ($row_count > 0) {
+        // Fetch the hashed password from the database
+        $quer = "SELECT password, type FROM accinfo WHERE email='$email'";
         $sql_result = mysqli_query($conn, $quer);
-        $resultstring = $sql_result->fetch_row();
-        if ($resultstring[0] == md5($pass)) {
-            $query = "select type from accinfo where email='$email'";
-            $sql_result = mysqli_query($conn, $query);
-            $resultstring1 = $sql_result->fetch_row()[0];
+        $result = $sql_result->fetch_assoc();
 
-            if ($resultstring1=="u") {
-                $_SESSION['email'] = $email;
-                echo '<script>alert("Login Success");window.open("../home/newhome.html","_self")</script';
+        // Verify the password (assuming passwords are stored as MD5 hashes)
+        if ($result['password'] == md5($pass)) {
+            // Set the email in session after successful login
+            $_SESSION['email'] = $email;
+
+            // Check if the user is an admin or regular user
+            if ($result['type'] == 'u') {
+                echo '<script>window.open("../home/newhome.php","_self")</script>';
             } else {
-                $_SESSION['email'] = $email; // Store the email in a session variable
                 echo '<script>window.open("../admin/admindash.php","_self")</script>';
-
             }
         } else {
-            echo '<script>alert("Credentials dont match");window.open("login.php","_Self")</script>';
+            // If the password doesn't match
+            echo '<script>alert("Incorrect password. Please try again.");window.open("login.php","_self")</script>';
         }
     } else {
-        echo '<script>alert("Email does not have an account");window.open("login.php","_Self")</script>';
+        // If the email does not exist
+        echo '<script>alert("Email does not exist. Please sign up.");window.open("login.php","_self")</script>';
     }
+
+    // Close the database connection
+    $conn->close();
 }
 ?>
+
 
 <html lang="en">
 <head>

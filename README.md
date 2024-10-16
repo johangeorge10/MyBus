@@ -1,5 +1,9 @@
 # MyBus
 pending works: 
-->seat.php update the seatbooked from table booked
+->use browser storage for storing email
 ->cutomer.php
 ->booking.php
+->Design booked (table)
+->save the data from sucessfull.html
+->clear session.storaage , session variables after sucessfull payment
+->seat.php update the seatbooked from table booked
