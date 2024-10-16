@@ -19,10 +19,10 @@ $toLocation = isset($_POST['to']) ? $_POST['to'] : 'City B';
 $departTime = isset($_POST['deptime']) ? $_POST['deptime'] : '9:00 AM';
 $D_Date = isset($_POST['date']) ? $_POST['date'] : '2024-10-18';
 $arrTime = isset($_POST['arrtime']) ? $_POST['arrtime'] : '12:00 PM';
-$totalPrice = isset($_POST['price']) ? $_POST['price'] : '';
+$cost = isset($_POST['price']) ? $_POST['price'] : '';
 $seats = isset($_POST['seats']) ? $_POST['seats'] : '';
 $totalSeats = isset($_POST['totalSeats']) ? $_POST['totalSeats'] : '';
-$cost=$totalPrice/$totalSeats;
+$totalPrice=$cost * $totalSeats;
 ?>
 
 <!DOCTYPE html>
@@ -97,24 +97,28 @@ $cost=$totalPrice/$totalSeats;
     <span class="close-button">&times;</span>
     <h2 id="payment-method-heading">Payment Method</h2>
 
-    <form id="credit-card-form">
-      <div class="form-group">
+    <form id="credit-card-form" action="../payment/successful.php" method="POST">
+    <div class="form-group">
         <label for="card-number">Card Number</label>
         <input type="text" id="card-number" name="card-number" placeholder="Enter your card number" required>
-      </div>
-      <div class="form-group">
+    </div>
+    <div class="form-group">
         <label for="cardholder-name">Cardholder Name</label>
         <input type="text" id="cardholder-name" name="cardholder-name" placeholder="Enter the cardholder name" required>
-      </div>
-      <div class="form-group">
+    </div>
+    <div class="form-group">
         <label for="expiry-date">Expiry Date</label>
         <input type="text" id="expiry-date" name="expiry-date" placeholder="MM/YYYY" required>
-      </div>
-      <div class="form-group">
+    </div>
+    <div class="form-group">
         <label for="cvv">CVV</label>
         <input type="text" id="cvv" name="cvv" placeholder="Enter the CVV code" required>
-      </div>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Pay Now" class="qr-btn">
+    </div>
     </form>
+
     <div class="qr-code"></div>
     <form action="../payment/sucessfull.php">
       <button type="submit" class="qr-btn">Pay Now</button>
