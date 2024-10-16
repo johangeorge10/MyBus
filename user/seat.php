@@ -111,7 +111,7 @@ $conn->close();
     $sql = "SELECT seatnumber FROM booked WHERE busid='$busNumber'";
     $result = mysqli_query($conn, $sql);
     while ($row = mysqli_fetch_assoc($result)) {
-        $bseats[] = $row['seat'];
+        $bseats[] = $row['seatnumber'];
     }
 
     $seatsPerRow = 5; // Number of seats per row

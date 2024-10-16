@@ -92,8 +92,6 @@
   <script>
     // Retrieve data from session storage
     const name = sessionStorage.getItem('name');
-    const email = sessionStorage.getItem('email');
-    const age = sessionStorage.getItem('age');
     const phone = sessionStorage.getItem('phone');
     const date = sessionStorage.getItem('D_Date');
     const from = sessionStorage.getItem('from');
@@ -101,44 +99,63 @@
     const busid = sessionStorage.getItem('busNumber');
     const arrtime = sessionStorage.getItem('arrTime');
     const seats = sessionStorage.getItem('seats');
+    const totalamount = sessionStorage.getItem('totalPrice');
+    const cost = sessionStorage.getItem('cost');
+    const totalnumberofseats = sessionStorage.getItem('totalSeats');
 
     // Display booking information
     const bookingInfo = document.getElementById('booking-info');
     bookingInfo.innerHTML = `
       <li><strong>Name:</strong> ${name}</li>
-      <li><strong>Email:</strong> ${email}</li>
-      <li><strong>Age:</strong> ${age}</li>
       <li><strong>Phone:</strong> ${phone}</li>
       <li><strong>Booking Date:</strong> ${date}</li>
       <li><strong>Route:</strong> From ${from} to ${to}</li>
       <li><strong>Bus ID:</strong> ${busid}</li>
       <li><strong>Arrival Time:</strong> ${arrtime}</li>
       <li><strong>Seats:</strong> ${seats}</li>
+      <li><strong>Total Amount:</strong> ${totalamount}</li>
     `;
+
+    // Store booking information in the database via PHP
+    const bookingData = {
+      name: name,
+      phone: phone,
+      date: date,
+      from: from,
+      to: to,
+      busid: busid,
+      arrtime: arrtime,
+      seatnumber: seats,
+      totalamount: totalamount,
+      cost: cost,
+      totalnumberofseats: totalnumberofseats,
+    };
+
+    fetch('storeBooking.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(bookingData),
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.status === 'success') {
+        console.log('Booking saved successfully:', data.message);
+      } else {
+        console.error('Error saving booking:', data.message);
+      }
+    })
+    .catch(error => console.error('Error:', error));
 
     // Clear session variables and redirect to home
     document.getElementById('return-home').addEventListener('click', function(event) {
-      event.preventDefault(); // Prevent default anchor behavior
-
-      // Make an AJAX call to clearingvariables.php
+      event.preventDefault();
       fetch('../index/clearingvariables.php')
         .then(response => {
           if (response.ok) {
-            // Clear session storage except for isLoggedIn
-            sessionStorage.removeItem('name');
-            sessionStorage.removeItem('age');
-            sessionStorage.removeItem('phone');
-            sessionStorage.removeItem('D_Date');
-            sessionStorage.removeItem('from');
-            sessionStorage.removeItem('to');
-            sessionStorage.removeItem('busNumber');
-            sessionStorage.removeItem('arrTime');
-            sessionStorage.removeItem('seats');
-
-            // Redirect to home after clearing session variables
+            sessionStorage.clear();
             window.location.href = "../home/newhome.php";
-          } else {
-            console.error('Failed to clear session variables');
           }
         })
         .catch(error => console.error('Error:', error));

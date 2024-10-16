@@ -22,6 +22,7 @@ $arrTime = isset($_POST['arrtime']) ? $_POST['arrtime'] : '12:00 PM';
 $totalPrice = isset($_POST['price']) ? $_POST['price'] : '';
 $seats = isset($_POST['seats']) ? $_POST['seats'] : '';
 $totalSeats = isset($_POST['totalSeats']) ? $_POST['totalSeats'] : '';
+$cost=$totalPrice/$totalSeats;
 ?>
 
 <!DOCTYPE html>
@@ -115,7 +116,7 @@ $totalSeats = isset($_POST['totalSeats']) ? $_POST['totalSeats'] : '';
       </div>
     </form>
     <div class="qr-code"></div>
-    <form action="../payment/sucessfull.html">
+    <form action="../payment/sucessfull.php">
       <button type="submit" class="qr-btn">Pay Now</button>
     </form>
   </div>
@@ -155,6 +156,7 @@ $totalSeats = isset($_POST['totalSeats']) ? $_POST['totalSeats'] : '';
       sessionStorage.setItem('arrTime', '<?php echo $arrTime; ?>');
       sessionStorage.setItem('totalPrice', '<?php echo $totalPrice; ?>');
       sessionStorage.setItem('seats', '<?php echo $seats; ?>');
+      sessionStorage.setItem('cost', '<?php echo $cost; ?>');
       sessionStorage.setItem('totalSeats', '<?php echo $totalSeats; ?>');
 
       alert('Customer information saved successfully!');
@@ -199,7 +201,7 @@ $totalSeats = isset($_POST['totalSeats']) ? $_POST['totalSeats'] : '';
       e.preventDefault();
       popup.classList.remove('show');
       // Perform further actions here, such as submitting the payment details
-      window.location.href = '../payment/sucessfull.html';
+      window.location.href = '../payment/sucessfull.php';
     });
 
     // Function to generate the QR code based on the selected payment method
