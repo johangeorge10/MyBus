@@ -126,11 +126,8 @@ h1 {
   width: 40px;
   height: 40px;
   margin: 5px;
-  background-color: #c5c5c5;
+  background-color: rgba(255, 0, 0, 0.5); /* Light transparent red */
   border-radius: 5px;
-  cursor: pointer;
-  margin-top: 15px;
+  cursor: not-allowed; /* Indicates that the seat is not selectable */
   transition: background-color 0.1s;
-  background-color: #d12744;
-  cursor: not-allowed;
 }
