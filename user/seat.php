@@ -108,7 +108,7 @@ $conn->close();
     <?php
     $bseats = [];
     $conn = new mysqli($servername, $username, $password, $dbname);
-    $sql = "SELECT seat FROM booked WHERE busid='$busNumber'";
+    $sql = "SELECT seatnumber FROM booked WHERE busid='$busNumber'";
     $result = mysqli_query($conn, $sql);
     while ($row = mysqli_fetch_assoc($result)) {
         $bseats[] = $row['seat'];

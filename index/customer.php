@@ -1,5 +1,17 @@
 <?php
 // session_start(); // Uncomment this if you need session management
+session_start();
+if (isset($_SESSION['email'])) {
+  $email = $_SESSION['email']; // Retrieve the email from the session
+} else {
+  $email = "Email not available"; // Handle the case where the email is not set
+}
+
+// if (isset($_SESSION['departDate'])) {
+//   $D_Date = $_SESSION['departDate']; // Retrieve the departdate from the session
+// } else {
+//   $departdate = "Depart date not available"; // Handle the case where the departdate is not set
+// }
 $busNumber = isset($_POST['bus_number']) ? $_POST['bus_number'] : 'Default Bus Number';
 $busName = isset($_POST['busname']) ? $_POST['busname'] : 'ABC Bus';
 $fromLocation = isset($_POST['from']) ? $_POST['from'] : 'City A';
@@ -103,7 +115,7 @@ $totalSeats = isset($_POST['totalSeats']) ? $_POST['totalSeats'] : '';
       </div>
     </form>
     <div class="qr-code"></div>
-    <form action="../payment/successful.html">
+    <form action="../payment/sucessfull.html">
       <button type="submit" class="qr-btn">Pay Now</button>
     </form>
   </div>
@@ -134,6 +146,7 @@ $totalSeats = isset($_POST['totalSeats']) ? $_POST['totalSeats'] : '';
       sessionStorage.setItem('phone', phone);
       //storing php variables
       sessionStorage.setItem('busNumber', '<?php echo $busNumber; ?>');
+      sessionStorage.setItem('email', '<?php echo $email; ?>');
       sessionStorage.setItem('busName', '<?php echo $busName; ?>');
       sessionStorage.setItem('from', '<?php echo $fromLocation; ?>');
       sessionStorage.setItem('to', '<?php echo $toLocation; ?>');
@@ -186,7 +199,7 @@ $totalSeats = isset($_POST['totalSeats']) ? $_POST['totalSeats'] : '';
       e.preventDefault();
       popup.classList.remove('show');
       // Perform further actions here, such as submitting the payment details
-      window.location.href = '../payment/successful.html';
+      window.location.href = '../payment/sucessfull.html';
     });
 
     // Function to generate the QR code based on the selected payment method

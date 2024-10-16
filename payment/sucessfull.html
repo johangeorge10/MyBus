@@ -58,6 +58,7 @@
       text-decoration: none;
       border-radius: 4px;
       transition: background-color 0.3s ease;
+      cursor: pointer;
     }
 
     .button:hover {
@@ -85,7 +86,7 @@
     <h2>Booking Information</h2>
     <ul class="booking-info" id="booking-info"></ul>
 
-    <a href="../home/home.html" class="button">Return to Home</a>
+    <a href="#" class="button" id="return-home">Return to Home</a>
   </div>
 
   <script>
@@ -94,11 +95,11 @@
     const email = sessionStorage.getItem('email');
     const age = sessionStorage.getItem('age');
     const phone = sessionStorage.getItem('phone');
-    const date = sessionStorage.getItem('date');
+    const date = sessionStorage.getItem('D_Date');
     const from = sessionStorage.getItem('from');
     const to = sessionStorage.getItem('to');
-    const busid = sessionStorage.getItem('busid');
-    const arrtime = sessionStorage.getItem('arrtime');
+    const busid = sessionStorage.getItem('busNumber');
+    const arrtime = sessionStorage.getItem('arrTime');
     const seats = sessionStorage.getItem('seats');
 
     // Display booking information
@@ -114,6 +115,34 @@
       <li><strong>Arrival Time:</strong> ${arrtime}</li>
       <li><strong>Seats:</strong> ${seats}</li>
     `;
+
+    // Clear session variables and redirect to home
+    document.getElementById('return-home').addEventListener('click', function(event) {
+      event.preventDefault(); // Prevent default anchor behavior
+
+      // Make an AJAX call to clearingvariables.php
+      fetch('../index/clearingvariables.php')
+        .then(response => {
+          if (response.ok) {
+            // Clear session storage except for isLoggedIn
+            sessionStorage.removeItem('name');
+            sessionStorage.removeItem('age');
+            sessionStorage.removeItem('phone');
+            sessionStorage.removeItem('D_Date');
+            sessionStorage.removeItem('from');
+            sessionStorage.removeItem('to');
+            sessionStorage.removeItem('busNumber');
+            sessionStorage.removeItem('arrTime');
+            sessionStorage.removeItem('seats');
+
+            // Redirect to home after clearing session variables
+            window.location.href = "../home/newhome.php";
+          } else {
+            console.error('Failed to clear session variables');
+          }
+        })
+        .catch(error => console.error('Error:', error));
+    });
   </script>
 </body>
 </html>
