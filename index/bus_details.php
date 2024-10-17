@@ -43,7 +43,8 @@ $sql = "SELECT DISTINCT
         WHERE
             bs_from.location_name = ? AND
             bs_to.location_name = ? AND
-            bs_from.stop_order < bs_to.stop_order";
+            bs_from.stop_order < bs_to.stop_order AND
+            (DATE(NOW()) < ? OR (DATE(NOW()) = ? AND bs_from.bus_time > TIME(NOW())))";
 
 $stmt = $conn->prepare($sql);
 
@@ -51,7 +52,7 @@ if (!$stmt) {
     die("SQL error: " . $conn->error);
 }
 
-$stmt->bind_param("ss", $from, $to);
+$stmt->bind_param("ssss", $from, $to, $departDate, $departDate);
 $stmt->execute();
 $result = $stmt->get_result();
 
@@ -61,17 +62,18 @@ if ($result->num_rows === 0) {
     // Fallback query if no results found in BusSchedule (check BusInfo for direct routes)
     $fallback = true; // Set fallback flag to true
     $sql_fallback = "SELECT
-                        busid,
-                        busname,
-                        startingpoint AS from_location,
-                        destination AS to_location,
-                        arrtime AS deptime,
-                        deptime AS arrtime,
-                        fixCost
-                    FROM
-                        BusInfo
-                    WHERE
-                        startingpoint = ? AND destination = ?";
+                    busid,
+                    busname,
+                    startingpoint AS from_location,
+                    destination AS to_location,
+                    arrtime AS deptime,
+                    deptime AS arrtime,
+                    fixCost
+                FROM
+                    BusInfo
+                WHERE
+                    startingpoint = ? AND destination = ? AND
+                    (DATE(NOW()) < ? OR (DATE(NOW()) = ? AND arrtime > TIME(NOW())))";
 
     $stmt_fallback = $conn->prepare($sql_fallback);
 
@@ -79,7 +81,7 @@ if ($result->num_rows === 0) {
         die("SQL error: " . $conn->error);
     }
 
-    $stmt_fallback->bind_param("ss", $from, $to);
+    $stmt_fallback->bind_param("ssss", $from, $to, $departDate, $departDate);;
     $stmt_fallback->execute();
     $result = $stmt_fallback->get_result();
 }
