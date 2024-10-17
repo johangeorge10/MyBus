@@ -22,7 +22,8 @@ $arrTime = isset($_POST['arrtime']) ? $_POST['arrtime'] : '12:00 PM';
 $cost = isset($_POST['price']) ? $_POST['price'] : '';
 $seats = isset($_POST['seats']) ? $_POST['seats'] : '';
 $totalSeats = isset($_POST['totalSeats']) ? $_POST['totalSeats'] : '';
-$totalPrice=$cost * $totalSeats;
+$totalPrice = isset($_POST['totalPrice']) ? $_POST['totalPrice'] : ''; 
+$cost = $totalPrice/$totalSeats;
 ?>
 
 <!DOCTYPE html>

@@ -16,6 +16,29 @@ if ($conn->connect_error) {
 }
 
 // Fetch POST variables
+
+$fromStopOrder = null;
+$toStopOrder = null;
+// $fixCost = null;
+
+if (isset($_POST["from_stop_order"])) {
+    $fromStopOrder = $_POST["from_stop_order"];
+} elseif (isset($_SESSION['from_stop_order'])) {
+    $fromStopOrder = $_SESSION['from_stop_order'];
+}
+
+if (isset($_POST["to_stop_order"])) {
+    $toStopOrder = $_POST["to_stop_order"];
+} elseif (isset($_SESSION['to_stop_order'])) {
+    $toStopOrder = $_SESSION['to_stop_order'];
+}
+
+// if (isset($_POST["fixCost"])) {
+//     $fixCost = $_POST["fixCost"];
+// } elseif (isset($_SESSION['fixCost'])) {
+//     $fixCost = $_SESSION['fixCost'];
+// }
+
 $busNumber = isset($_POST["bus_number"]) ? $_POST["bus_number"] : $_SESSION['busno'];
 $departDate = isset($_POST["date"]) ? $_POST["date"] : $_SESSION['date'];
 $fromLocation = isset($_POST["from"]) ? $_POST["from"] : $_SESSION['from'];
@@ -24,6 +47,14 @@ $busName = isset($_POST["busname"]) ? $_POST["busname"] : $_SESSION['busname'];
 $departTime = isset($_POST["deptime"]) ? $_POST["deptime"] : $_SESSION['deptime'];
 $arrTime = isset($_POST["arrtime"]) ? $_POST["arrtime"] : $_SESSION['arrtime'];
 
+
+// Conditional calculation for stop difference
+$stopdiff = 0; // Default value if no data is available
+if (isset($fromStopOrder) && isset($toStopOrder)) {
+    $stopdiff = $toStopOrder - $fromStopOrder; // Calculate only if both are set
+}
+
+$hasStationData = isset($fromStopOrder) && isset($toStopOrder);
 // Time travel calculation
 $departDateTime = DateTime::createFromFormat('H:i:s', $departTime);
 $arrivalDateTime = DateTime::createFromFormat('H:i:s', $arrTime);
@@ -52,6 +83,8 @@ if ($result->num_rows > 0) {
     $departure = $row["startingpoint"];
     $capacity = $row['seatcapacity'];
     $price = $row['cost']; // Get the cost directly
+    $fixCost =$row['fixCost'];
+    $incrementFare =$row['incrementFare'];
 } else {
     // Bus not found
     die("Invalid bus number");
@@ -99,6 +132,7 @@ $conn->close();
         <form id="bookingForm" action="../index/customer.php" method="POST" style="display: none;">
             <input type="hidden" name="seats" id="seatsInput">
             <input type="hidden" name="totalSeats" id="totalSeatsInput">
+            <input type="hidden" name="totalPrice" id="totalPriceInput">
             <input type="hidden" name="bus_number" value="<?php echo $busNumber; ?>">
             <input type="hidden" name="date" value="<?php echo $departDate; ?>">
             <input type="hidden" name="from" value="<?php echo $fromLocation; ?>">
@@ -106,7 +140,6 @@ $conn->close();
             <input type="hidden" name="busname" value="<?php echo $busName; ?>">
             <input type="hidden" name="deptime" value="<?php echo $departTime; ?>">
             <input type="hidden" name="arrtime" value="<?php echo $arrTime; ?>">
-            <input type="hidden" name="price" id="priceInput" value="<?php echo $price; ?>">
         </form>
     </div>
 
@@ -142,53 +175,79 @@ $conn->close();
     </div>
 </div>
 
-    <script>
-        const seatPrice = <?php echo $price; ?>; // Base price per seat
-        let selectedSeats = [];
+<script>
+    // Set this variable based on PHP logic
+    const useFixCost = <?php echo $hasStationData ? 'true' : 'false'; ?>; // true if $hasStationData is true
+    const seatPrice = <?php echo $price; ?>; // Base price per seat
+    const fixCost = <?php echo $fixCost; ?>; // Fixed cost from PHP
+    let selectedSeats = [];
 
-        function toggleSeat(seatElement) {
-            const seatNumber = seatElement.dataset.seat;
-            seatElement.classList.toggle('selected');
-            if (selectedSeats.includes(seatNumber)) {
-                selectedSeats = selectedSeats.filter(seat => seat !== seatNumber);
-            } else {
-                selectedSeats.push(seatNumber);
-            }
-            updateTotalPrice();
-            updateSelectedSeatsDisplay(); // Update the display of selected seats
+    function toggleSeat(seatElement) {
+        const seatNumber = seatElement.dataset.seat;
+        seatElement.classList.toggle('selected');
+        if (selectedSeats.includes(seatNumber)) {
+            selectedSeats = selectedSeats.filter(seat => seat !== seatNumber);
+        } else {
+            selectedSeats.push(seatNumber);
+        }
+        updateTotalPrice();
+        updateSelectedSeatsDisplay(); // Update the display of selected seats
+    }
+
+    function updateTotalPrice() {
+        
+
+        let pricePerSeat;
+
+        // Decide which price to use based on the useFixCost variable
+        if (useFixCost) {
+            const incrementFare = <?php echo $incrementFare; ?>; // Fetch incrementFare from PHP
+            const stopdiff = <?php echo $stopdiff; ?>; // Fetch stopdiff from PHP
+            pricePerSeat = seatPrice + (stopdiff * incrementFare); // Use base price + increment fare
+        } else {
+            pricePerSeat = fixCost; // Use the fixed cost
         }
 
-        function updateTotalPrice() {
-            const totalPrice = selectedSeats.length * seatPrice;
-            document.getElementById('totalPrice').innerText = totalPrice;
+        // Total price for all selected seats
+        const totalPrice = selectedSeats.length * pricePerSeat;
+
+        // Update the displayed total price
+        document.getElementById('totalPrice').innerText = totalPrice;
+
+        // Update the hidden input field with the total price
+        document.getElementById('totalPriceInput').value = totalPrice;
+    }
+
+    // New function to update the display of selected seats and count
+    function updateSelectedSeatsDisplay() {
+        const totalTickets = selectedSeats.length;
+        document.getElementById('totalTickets').innerText = totalTickets;
+
+        if (totalTickets > 0) {
+            document.getElementById('selectedSeatsDisplay').innerText = selectedSeats.join(', ');
+        } else {
+            document.getElementById('selectedSeatsDisplay').innerText = ''; // Clear display if no seats are selected
+        }
+    }
+
+    function redirectToCustomerPage() {
+        // Check if any seats are selected
+        if (selectedSeats.length === 0) {
+            alert('Please select at least one seat before proceeding.');
+            return; // Prevent form submission if no seats are selected
         }
 
-        // New function to update the display of selected seats and count
-        function updateSelectedSeatsDisplay() {
-            const totalTickets = selectedSeats.length;
-            document.getElementById('totalTickets').innerText = totalTickets;
+        // Set values in hidden form fields
+        document.getElementById('seatsInput').value = selectedSeats.join(',');
+        document.getElementById('totalSeatsInput').value = selectedSeats.length;
 
-            if (totalTickets > 0) {
-                document.getElementById('selectedSeatsDisplay').innerText = selectedSeats.join(', ');
-            } else {
-                document.getElementById('selectedSeatsDisplay').innerText = ''; // Clear display if no seats are selected
-            }
-        }
+        // Update the hidden totalPrice field with the calculated value
+        updateTotalPrice();
 
-        function redirectToCustomerPage() {
-            // Check if any seats are selected
-            if (selectedSeats.length === 0) {
-                alert('Please select at least one seat before proceeding.');
-                return; // Prevent form submission if no seats are selected
-            }
+        // Submit the form
+        document.getElementById('bookingForm').submit();
+    }
+</script>
 
-            // Set values in hidden form fields
-            document.getElementById('seatsInput').value = selectedSeats.join(',');
-            document.getElementById('totalSeatsInput').value = selectedSeats.length;
-
-            // Submit the form
-            document.getElementById('bookingForm').submit();
-        }
-    </script>
 </body>
 </html>

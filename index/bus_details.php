@@ -31,7 +31,9 @@ $sql = "SELECT DISTINCT
             bs_from.location_name AS from_location,
             bs_to.location_name AS to_location,
             bs_from.bus_time AS deptime,
-            bs_to.bus_time AS arrtime
+            bs_to.bus_time AS arrtime,
+            bs_from.stop_order AS from_stop_order,
+            bs_to.stop_order AS to_stop_order
         FROM
             BusInfo b
         INNER JOIN
@@ -53,15 +55,19 @@ $stmt->bind_param("ss", $from, $to);
 $stmt->execute();
 $result = $stmt->get_result();
 
+$fallback = false; // Indicator for fallback query
+
 if ($result->num_rows === 0) {
     // Fallback query if no results found in BusSchedule (check BusInfo for direct routes)
+    $fallback = true; // Set fallback flag to true
     $sql_fallback = "SELECT
                         busid,
                         busname,
                         startingpoint AS from_location,
                         destination AS to_location,
                         deptime,
-                        arrtime
+                        arrtime,
+                        fixCost
                     FROM
                         BusInfo
                     WHERE
@@ -174,6 +180,14 @@ if ($result->num_rows === 0) {
             <input type="hidden" name="busname" value="<?php echo $row["busname"]; ?>">
             <input type="hidden" name="deptime" value="<?php echo $row["deptime"]; ?>">
             <input type="hidden" name="arrtime" value="<?php echo $row["arrtime"]; ?>">
+            
+            <?php if (!$fallback): ?>
+            <input type="hidden" name="from_stop_order" value="<?php echo $row['from_stop_order']; ?>">
+            <input type="hidden" name="to_stop_order" value="<?php echo $row['to_stop_order']; ?>">
+            <?php else: ?>
+                <input type="hidden" name="fixCost" value="<?php echo $row['fixCost']; ?>">
+            <?php endif; ?>
+            
             <button class="btn" type="submit">Select Seat</button>
           </form>
         </td>
