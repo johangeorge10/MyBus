@@ -119,7 +119,7 @@ $conn->close();
             <p><strong>Bus:</strong> <?php echo $departure . " - " . $destination; ?></p>
             <p><strong>Destination:</strong> <?php echo $toLocation; ?></p>
             <p><strong>Departure:</strong> <?php echo $fromLocation; ?></p>
-            <p><strong>Price:</strong> <span class="ticket-price">$<span id="totalPrice"><?php echo $price; ?></span></span></p>
+            <p><strong>Price:</strong> <span class="ticket-price">$<span id="totalPrice">0</span></span></p>
             <p><strong>Depart Date:</strong> <?php echo $departDate; ?></p>
             <p><strong>Depart Time:</strong> <?php echo $departTime; ?></p>
             <p><strong>Arrival Time:</strong> <?php echo $arrTime; ?></p>

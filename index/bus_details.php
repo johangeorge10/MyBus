@@ -65,8 +65,8 @@ if ($result->num_rows === 0) {
                         busname,
                         startingpoint AS from_location,
                         destination AS to_location,
-                        deptime,
-                        arrtime,
+                        arrtime AS deptime,
+                        deptime AS arrtime,
                         fixCost
                     FROM
                         BusInfo

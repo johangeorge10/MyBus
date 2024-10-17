@@ -15,6 +15,9 @@ TO DO->
 ->Generate seatticket for each customer
 ->redirect to checkticket | latest ticket after payment
 ->BUG FIX in AdminPage , add , edit ,delete bus scheddule,autodelete bus schedule , bugs with active and inactive buses
+->IsLoggedIn session storage variable -set
+->unavailable marking red layout issues on station to station
+
 
 
 CURRENT->

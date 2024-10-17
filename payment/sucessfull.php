@@ -91,6 +91,7 @@
 
   <script>
     // Retrieve data from session storage
+    const email = sessionStorage.getItem('email');
     const name = sessionStorage.getItem('name');
     const phone = sessionStorage.getItem('phone');
     const date = sessionStorage.getItem('D_Date');
@@ -107,6 +108,7 @@
     const bookingInfo = document.getElementById('booking-info');
     bookingInfo.innerHTML = `
       <li><strong>Name:</strong> ${name}</li>
+      <li><strong>Name:</strong> ${email}</li>
       <li><strong>Phone:</strong> ${phone}</li>
       <li><strong>Booking Date:</strong> ${date}</li>
       <li><strong>Route:</strong> From ${from} to ${to}</li>
@@ -118,6 +120,7 @@
 
     // Store booking information in the database via PHP
     const bookingData = {
+      email:email,
       name: name,
       phone: phone,
       date: date,

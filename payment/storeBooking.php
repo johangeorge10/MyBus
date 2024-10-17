@@ -21,6 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Check if data is not empty
     if (!empty($data)) {
+        $email = $data['email'];  // Retrieve email from data
         $name = $data['name'];
         $phonenumber = $data['phone'];
         $date = $data['date'];
@@ -36,15 +37,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Split the seat numbers by comma to get an array of seat numbers
         $seats = explode(',', $seatnumbers);
 
-        // Prepare the SQL query for each seat booking
-        $stmt = $conn->prepare("INSERT INTO booked (busid, arrtime, date, seatnumber, name, phonenumber, totalamount, cost, totalnumberofseats, `from`, `to`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        // Prepare the SQL query for each seat booking, including email
+        $stmt = $conn->prepare("INSERT INTO booked (busid, arrtime, date, seatnumber, name, phonenumber, totalamount, cost, totalnumberofseats, email, `from`, `to`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
         foreach ($seats as $seatnumber) {
             // Trim to remove any extra spaces
             $seatnumber = trim($seatnumber);
 
             // Bind parameters for each seat number and execute the statement
-            $stmt->bind_param("isssssiiiss", $busid, $arrtime, $date, $seatnumber, $name, $phonenumber, $totalamount, $cost, $totalnumberofseats, $from, $to);
+            $stmt->bind_param("isssssiiisss", $busid, $arrtime, $date, $seatnumber, $name, $phonenumber, $totalamount, $cost, $totalnumberofseats, $email, $from, $to);
 
             if (!$stmt->execute()) {
                 echo json_encode(["status" => "error", "message" => "Error: " . $stmt->error]);
