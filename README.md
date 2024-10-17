@@ -17,6 +17,10 @@ TO DO->
 ->BUG FIX in AdminPage , add , edit ,delete bus scheddule,autodelete bus schedule , bugs with active and inactive buses
 ->IsLoggedIn session storage variable -set
 ->unavailable marking red layout issues on station to station
+->Forgot password -phpmailer
+->Refund
+->Date bug 
+->seat spacing in seat.php
 
 
 

@@ -28,7 +28,7 @@ if (isset($_SESSION['email'])) {
             <ul>
                 <li><a href="#">HOME</a></li>
                 <li><a href="../index/index.php">MAKE BOOKING</a></li>
-                <li><a href="">CHECK TICKETS</a></li>
+                <li><a href="../ticket/checkticket.php">CHECK TICKETS</a></li>
                 <li><button onclick="logoutUser()">LOGOUT</button></li>
             </ul>
         </div>
