@@ -158,7 +158,7 @@
         .then(response => {
           if (response.ok) {
             sessionStorage.clear();
-            window.location.href = "../home/newhome.php";
+            window.location.href = "../ticket/checkticket.php";
           }
         })
         .catch(error => console.error('Error:', error));

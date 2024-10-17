@@ -36,15 +36,19 @@ $stmt->bind_param('s', $user_email); // Bind the email as a string
 $stmt->execute();
 $result = $stmt->get_result();
 
-$today = date('Y-m-d');
+// Get current date and time
+$currentDateTime = new DateTime(); // Current date and time
 $tickets = ['active' => [], 'expired' => []];
 
-// Separate tickets into active and expired based on the current date
+// Separate tickets into active and expired based on the current date and time
 while ($row = $result->fetch_assoc()) {
-    if ($row['date'] >= $today) {
-        $tickets['active'][] = $row;
+    // Create a DateTime object for the ticket's date and arrival time
+    $ticketDateTime = new DateTime($row['date'] . ' ' . $row['arrtime']);
+
+    if ($ticketDateTime >= $currentDateTime) {
+        $tickets['active'][] = $row; // Add to active if the ticket's date and time are in the future
     } else {
-        $tickets['expired'][] = $row;
+        $tickets['expired'][] = $row; // Add to expired if the ticket's date and time are in the past
     }
 }
 ?>
@@ -198,7 +202,7 @@ while ($row = $result->fetch_assoc()) {
                 <div class="col col-4" data-label="Seat Numbers"><?= $ticket['seatnumbers'] ?></div>
                 <div class="col col-5" data-label="Total Amount"><?= $ticket['totalamount'] ?></div>
                 <div class="col col-5" data-label="Action">
-                    <a href="refund.php?booking_id=<?= $ticket['booking_id'] ?>" class="btn btn-warning">Refund</a>
+                <a href="refund.php?seatnumbers=<?= urlencode($ticket['seatnumbers']) ?>&date=<?= urlencode($ticket['date']) ?>&busid=<?= urlencode($ticket['busid']) ?>&arrtime=<?= urlencode($ticket['arrtime']) ?>" class="btn btn-warning">Refund</a>
                 </div>
             </li>
             <?php endforeach; ?>
