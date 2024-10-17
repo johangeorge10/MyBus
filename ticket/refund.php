@@ -109,14 +109,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             background-color: #e53935;
         }
     </style>
-    <script>
-        function confirmRefund() {
-            var refundableAmount = <?= json_encode(number_format($refundableAmount, 2)) ?>;
-            var totalAmount = <?= json_encode(number_format($booking['totalamount'], 2)) ?>;
-            var deduction = (totalAmount - refundableAmount).toFixed(2);
-            return confirm("You are about to refund. A deduction of ₹" + deduction + " will be applied (10%). Do you want to continue?");
-        }
-    </script>
 </head>
 <body>
 
@@ -126,7 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <p>Total amount paid: ₹<?= number_format($booking['totalamount'], 2) ?></p>
     <p>Refundable amount: ₹<?= number_format($refundableAmount, 2) ?></p>
     
-    <form method="POST" action="" onsubmit="return confirmRefund();">
+    <form method="POST" action="">
         <button type="submit">Continue for Refund</button>
     </form>
 </div>

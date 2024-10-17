@@ -194,18 +194,25 @@ while ($row = $result->fetch_assoc()) {
                 <div class="col col-5">Total Amount</div>
                 <div class="col col-5">Action</div>
             </li>
-            <?php foreach ($tickets['active'] as $ticket): ?>
-            <li class="table-row">
-                <div class="col col-1" data-label="Bus ID"><?= $ticket['busid'] ?></div>
-                <div class="col col-2" data-label="Date"><?= $ticket['date'] ?></div>
-                <div class="col col-3" data-label="Arrival Time"><?= $ticket['arrtime'] ?></div>
-                <div class="col col-4" data-label="Seat Numbers"><?= $ticket['seatnumbers'] ?></div>
-                <div class="col col-5" data-label="Total Amount"><?= $ticket['totalamount'] ?></div>
-                <div class="col col-5" data-label="Action">
-                <a href="refund.php?seatnumbers=<?= urlencode($ticket['seatnumbers']) ?>&date=<?= urlencode($ticket['date']) ?>&busid=<?= urlencode($ticket['busid']) ?>&arrtime=<?= urlencode($ticket['arrtime']) ?>" class="btn btn-warning">Refund</a>
-                </div>
-            </li>
-            <?php endforeach; ?>
+
+            <?php if (empty($tickets['active'])): ?>
+                <li class="table-row">
+                    <div class="col col-1" data-label="No Active Reservations" colspan="5">No active reservations available.</div>
+                </li>
+            <?php else: ?>
+                <?php foreach ($tickets['active'] as $ticket): ?>
+                <li class="table-row">
+                    <div class="col col-1" data-label="Bus ID"><?= $ticket['busid'] ?></div>
+                    <div class="col col-2" data-label="Date"><?= $ticket['date'] ?></div>
+                    <div class="col col-3" data-label="Arrival Time"><?= $ticket['arrtime'] ?></div>
+                    <div class="col col-4" data-label="Seat Numbers"><?= $ticket['seatnumbers'] ?></div>
+                    <div class="col col-5" data-label="Total Amount"><?= $ticket['totalamount'] ?></div>
+                    <div class="col col-5" data-label="Action">
+                        <a href="refund.php?seatnumbers=<?= urlencode($ticket['seatnumbers']) ?>&date=<?= urlencode($ticket['date']) ?>&busid=<?= urlencode($ticket['busid']) ?>&arrtime=<?= urlencode($ticket['arrtime']) ?>" class="btn btn-warning">Refund</a>
+                    </div>
+                </li>
+                <?php endforeach; ?>
+            <?php endif; ?>
         </ul>
 
         <!-- Expired Tickets (only if they exist) -->
