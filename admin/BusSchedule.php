@@ -23,6 +23,14 @@ if (isset($_POST['submitBus'])) {
             }
 
             echo "</table>";
+
+            // Buttons for editing and deleting the schedule
+            echo "<form method='post' action='BusSchedule.php'>";
+            echo "<input type='hidden' name='busid' value='$busid'>";
+            echo "<input type='submit' name='editSchedule' value='Edit Schedule'>";
+            echo "<input type='submit' name='deleteSchedule' value='Delete Schedule'>";
+            echo "<button type='button' onclick='exitPage()' style='margin-right: 10px;'>Exit</button>";
+            echo "</form>";
         } else {
             // No schedule exists, prompt admin to add bus stops
             echo "<h3>No schedule found for Bus ID: $busid</h3>";
@@ -42,7 +50,44 @@ if (isset($_POST['submitBus'])) {
     }
 }
 
-// Handle adding the bus stops
+// Handle editing the bus stops (deleting old and recreating new)
+if (isset($_POST['editSchedule'])) {
+    $busid = $_POST['busid'];
+    $conn = new mysqli("localhost", "root", "", "mydb");
+
+    // Delete existing schedule for this bus
+    $delete_query = "DELETE FROM busschedule WHERE busid='$busid'";
+    if (mysqli_query($conn, $delete_query)) {
+        echo "<h3>Bus Schedule deleted. Please enter new stops for Bus ID: $busid</h3>";
+        echo "<form method='post' action='BusSchedule.php'>";
+        echo "<label for='num_stops'>Enter Number of Bus Stops:</label>";
+        echo "<input type='number' id='num_stops' name='num_stops' required><br>";
+        echo "<input type='hidden' name='busid' value='$busid'>";
+        echo "<input type='submit' name='createSchedule' value='Add Bus Stops'>";
+        echo "</form>";
+    } else {
+        echo "Error deleting schedule: " . mysqli_error($conn);
+    }
+}
+
+// Handle deleting the bus stops
+if (isset($_POST['deleteSchedule'])) {
+    $busid = $_POST['busid'];
+    $conn = new mysqli("localhost", "root", "", "mydb");
+
+    // Delete schedule for this bus
+    $delete_query = "DELETE FROM busschedule WHERE busid='$busid'";
+    if (mysqli_query($conn, $delete_query)) {
+        echo "<script>
+                alert('Bus schedule deleted successfully!');
+                window.location.href = 'admindash.php';
+              </script>";
+    } else {
+        echo "Error deleting schedule: " . mysqli_error($conn);
+    }
+}
+
+// Handle adding the bus stops (after editing or adding)
 if (isset($_POST['createSchedule'])) {
     $busid = $_POST['busid'];
     $num_stops = $_POST['num_stops'];
@@ -62,9 +107,6 @@ if (isset($_POST['createSchedule'])) {
         echo "<label for='order_$i'>Order of Stop:</label>";
         echo "<input type='number' id='order_$i' name='order[]' required><br><br>";
     }
-
-    // Exit button to return to the main BusSchedule.php
-    echo "<button type='button' onclick='exitPage()' style='margin-right: 10px;'>Exit</button>";
 
     echo "<input type='hidden' name='busid' value='$busid'>";
     echo "<input type='submit' name='saveSchedule' value='Save Schedule'>";
@@ -86,7 +128,7 @@ if (isset($_POST['saveSchedule'])) {
         $order = $orders[$i];
 
         // Insert the schedule into the BusSchedule table
-        $query = "INSERT INTO BusSchedule (busid, location_name, bus_time, stop_order)
+        $query = "INSERT INTO busschedule (busid, location_name, bus_time, stop_order)
                   VALUES ('$busid', '$location', '$time', '$order')";
 
         if (!mysqli_query($conn, $query)) {
@@ -98,7 +140,6 @@ if (isset($_POST['saveSchedule'])) {
             alert('Bus schedule added successfully!');
             window.location.href = 'admindash.php';
           </script>";
-    
 }
 ?>
 

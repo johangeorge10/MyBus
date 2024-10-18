@@ -3,13 +3,25 @@
 </head>
 <?php 
 
-if(isset($_POST['delete']))
-{
-  $conn = new mysqli("localhost", "root", "", "mydb");
-$deleteid=$_POST['deleteid'];
-mysqli_query($conn,"DELETE FROM businfo WHERE busid='$deleteid'");
 
-echo "<script> location.href='admindash.php' </script>";
+if (isset($_POST['delete'])) {
+  $conn = new mysqli("localhost", "root", "", "mydb");
+  if ($conn->connect_error) {
+      die("Connection failed: " . $conn->connect_error);
+  }
+  $deleteid = $_POST['deleteid'];
+
+  // Prepare statements to delete schedule and bus info
+  $stmt1 = $conn->prepare("DELETE FROM busschedule WHERE busid = ?");
+  $stmt1->bind_param("s", $deleteid);
+  $stmt1->execute();
+
+  $stmt2 = $conn->prepare("DELETE FROM businfo WHERE busid = ?");
+  $stmt2->bind_param("s", $deleteid);
+  $stmt2->execute();
+
+  // Redirect after deletion
+  echo "<script> location.href='admindash.php' </script>";
 }
 
 ?>
