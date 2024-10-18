@@ -1,5 +1,6 @@
 <?php
 if (isset($_POST['signup'])) {
+    $name = $_POST['name'];
     $email = $_POST['email'];
     $pass = $_POST['pass'];
     $repass = $_POST['pass'];
@@ -17,7 +18,7 @@ if (isset($_POST['signup'])) {
         die;
     }
     $securepass = md5($pass);
-    $query = "insert into accinfo(email,password,type) values('$email','$securepass','u')";
+    $query = "insert into accinfo(email,name,password,type) values('$email','$name','$securepass','u')";
 
     $sql_status = mysqli_query($conn, $query);
 
@@ -43,19 +44,21 @@ if (isset($_POST['signup'])) {
 <div class="form-content">
     <header>SignUp</header>
 <form action="signup.php" method="POST" onsubmit="return validate()">
-    <div class="field input-field">
+        <div class="field input-field">
         <input type="email" placeholder="Email" name="email" id="email" required>
         </div>
         <div class="field input-field">
-
-<input type="password" placeholder="password" name="pass" id="password"required>
-</div>
-<div class="field input-field">
-<input type="password" placeholder="Retype password" name="pass1" id="password1"required>
-    </div>
-    <div class="field-button">
-    <button type="submit" name="signup" class="field-button" value="signup">Signup</button>  </div>
-   <span>Already Have Account ?<a href="login.php" class="login-red">Login</a></span>
+        <input type="text" placeholder="Name" name="name" id="name" required>
+        </div>
+        <div class="field input-field">
+        <input type="password" placeholder="password" name="pass" id="password"required>
+        </div>
+        <div class="field input-field">
+        <input type="password" placeholder="Retype password" name="pass1" id="password1"required>
+        </div>
+        <div class="field-button">
+        <button type="submit" name="signup" class="field-button" value="signup">Signup</button>  </div>
+        <span>Already Have Account ?<a href="login.php" class="login-red">Login</a></span>
 </form>
 </div>
 </div>
@@ -63,7 +66,9 @@ if (isset($_POST['signup'])) {
 </body>
 <script>
 function validate()
-{ var mail=document.getElementById("email").value;
+{ 
+    var name=document.getElementById("name").value;
+    var mail=document.getElementById("email").value;
     var pass1=document.getElementById("password").value;
  var pass=document.getElementById("password1").value;
 if(pass1==pass)

@@ -27,7 +27,7 @@ if (isset($_POST['login'])) {
 
     if ($row_count > 0) {
         // Fetch the hashed password from the database
-        $quer = "SELECT password, type FROM accinfo WHERE email='$email'";
+        $quer = "SELECT password, type ,name FROM accinfo WHERE email='$email'";
         $sql_result = mysqli_query($conn, $quer);
         $result = $sql_result->fetch_assoc();
 
@@ -35,7 +35,7 @@ if (isset($_POST['login'])) {
         if ($result['password'] == md5($pass)) {
             // Set the email in session after successful login
             $_SESSION['email'] = $email;
-
+            $_SESSION['name'] = $result['name'];
             // Check if the user is an admin or regular user
             if ($result['type'] == 'u') {
                 echo '<script>window.open("../home/newhome.php","_self")</script>';

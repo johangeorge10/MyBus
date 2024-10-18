@@ -1,10 +1,12 @@
 <?php
 session_start(); // Start the session
-if (isset($_SESSION['email'])) {
+if (isset($_SESSION['email']) && isset($_SESSION['name'])) {
     $email = $_SESSION['email'];
-} else {
+    $name = $_SESSION['name'];
+}
+    else {
     // Redirect to login page if the session does not exist
-    header("Location: login.php");
+    header("Location: home.html");
     exit();
 }
 ?>
@@ -21,8 +23,7 @@ if (isset($_SESSION['email'])) {
             <p style="color: white; margin: 0; padding: 0; font-family: 'Londrina Sketch', cursive;"> 
             Hello  
             <?php 
-            $email_parts = explode('@', $email);  // Split the email at '@'
-            echo '         ' . $email_parts[0] . '  !!!';
+            echo '         ' . $name . '  !!!';
             ?>
             </p>
             <ul>

@@ -4,6 +4,10 @@ session_start();
 // Check if the user is logged in
 if (isset($_SESSION['email'])) {
     $user_email = $_SESSION['email']; // Fetch the current user's email
+    if (isset($_SESSION['name'])) {
+        $user_name = $_SESSION['name']; // Fetch the current user's email
+        
+    }
 } else {
     header("Location: login.php");
     exit();
@@ -168,8 +172,7 @@ while ($row = $result->fetch_assoc()) {
             <p style="color: white; margin: 0; padding: 0; font-family: 'Londrina Sketch', cursive;"> 
             Hello  
             <?php 
-            $email_parts = explode('@', $user_email);  // Split the email at '@'
-            echo '         ' . $email_parts[0] . '  !!!';
+            echo '         ' . $user_name . '  !!!';
             ?>
             </p>
             <ul>
@@ -189,7 +192,7 @@ while ($row = $result->fetch_assoc()) {
             <li class="table-header">
                 <div class="col col-1">Bus ID</div>
                 <div class="col col-2">Date</div>
-                <div class="col col-3">Arrival Time</div>
+                <div class="col col-3">Departure Time</div>
                 <div class="col col-4">Seat Numbers</div>
                 <div class="col col-5">Total Amount</div>
                 <div class="col col-5">Action</div>
@@ -222,7 +225,7 @@ while ($row = $result->fetch_assoc()) {
             <li class="table-header">
                 <div class="col col-1">Bus ID</div>
                 <div class="col col-2">Date</div>
-                <div class="col col-3">Arrival Time</div>
+                <div class="col col-3">Departure Time</div>
                 <div class="col col-4">Seat Numbers</div>
                 <div class="col col-5">Total Amount</div>
             </li>
