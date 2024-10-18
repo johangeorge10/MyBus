@@ -1,9 +1,11 @@
 <?php
+// Load the mail configuration from config.php
+require __DIR__ . '/../config.php';
+
 // Load PHPMailer files from the extracted directory
 require '../PHPMailer-master/src/Exception.php';
 require '../PHPMailer-master/src/PHPMailer.php';
 require '../PHPMailer-master/src/SMTP.php';
-
 
 // Use PHPMailer classes
 use PHPMailer\PHPMailer\PHPMailer;
@@ -37,20 +39,18 @@ if (isset($_POST['forgot'])) {
         $sql = "UPDATE accinfo SET reset_token='$token', reset_expires='$expires' WHERE email='$email'";
         $conn->query($sql);
 
-        
-
         // Create a new PHPMailer instance
         $mail = new PHPMailer;
 
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com'; // Gmail's SMTP server
         $mail->SMTPAuth = true;
-        $mail->Username = 'managebuseg@gmail.com'; // Your email address
-        $mail->Password = 'shxi lsic ekml yjie'; // Your email password
+        $mail->Username = $config["mail"]["username"];  // Use config values
+        $mail->Password = $config["mail"]["password"];
         $mail->SMTPSecure = 'tls'; // Encryption
         $mail->Port = 587;
 
-        $mail->setFrom('managebuseg@gmail.com', 'Mail'); // Sender's email
+        $mail->setFrom($config["mail"]["username"], 'Mail'); // Sender's email
         $mail->addAddress($email); // Add the recipient's email
 
         // Set email format to HTML
