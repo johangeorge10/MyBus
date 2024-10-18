@@ -159,11 +159,29 @@ $conn->close();
 
     foreach ($rows as $row) {
         echo "<div class='row'>"; // Start a new row
+        $count=0;
         foreach ($row as $i) {
-            // Display available or occupied seats
             if (!in_array($i, $bseats)) {
+                $count=$count+1;
+                if($count==4)
+                {
+                    echo "<div class='spacing' style='margin-right: 30px'></div>";
+                }
+                if($count==5)
+                {
+                    $count=0;
+                }
                 echo "<div class='seat' data-seat='$i' onclick='toggleSeat(this)'>$i</div>";
             } else {
+                $count=$count+1;
+                if($count==4)
+                {
+                    echo "<div class='spacing' style='margin-right: 30px'></div>";
+                }
+                if($count==5)
+                {
+                    $count=0;
+                }
                 echo "<div class='occupied' style='margin-top: 15px;'>$i</div>";
             }
         }
