@@ -86,6 +86,7 @@
     <h2>Booking Information</h2>
     <ul class="booking-info" id="booking-info"></ul>
 
+    <a href="#" class="button" id="checkticket">Check Ticket</a>
     <a href="#" class="button" id="return-home">Return to Home</a>
   </div>
 
@@ -152,13 +153,24 @@
     .catch(error => console.error('Error:', error));
 
     // Clear session variables and redirect to home
-    document.getElementById('return-home').addEventListener('click', function(event) {
+    document.getElementById('checkticket').addEventListener('click', function(event) {
       event.preventDefault();
       fetch('../index/clearingvariables.php')
         .then(response => {
           if (response.ok) {
             sessionStorage.clear();
             window.location.href = "../ticket/checkticket.php";
+          }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+    document.getElementById('return-home').addEventListener('click', function(event) {
+      event.preventDefault();
+      fetch('../index/clearingvariables.php')
+        .then(response => {
+          if (response.ok) {
+            sessionStorage.clear();
+            window.location.href = "../home/newhome.php";
           }
         })
         .catch(error => console.error('Error:', error));
