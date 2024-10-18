@@ -15,15 +15,25 @@ DONE->
 ->Refund ->DONE
 ->Date bug ->DONE
 ->add name in SignUP ->DONE
+->unavailable marking red layout issues on station to station ->DONE
+->seat spacing in seat.php ->DONE
+->seat booking issues with same bus with diff places -> removed constraints on arrtime ->DONE
+
 
 TO DO->
-->BUG FIX in AdminPage , add , edit ,delete bus scheddule,autodelete bus schedule , bugs with active and inactive buses
-->IsLoggedIn session storage variable -set
-->unavailable marking red layout issues on station to station
+
 ->sent mail for booked info -phpmailer
 ->sent mail on refund
 ->Forgot password -phpmailer
-->seat spacing in seat.php
+
+->BUG FIX in AdminPage , add , edit ,delete bus scheddule,autodelete bus schedule , bugs with active and inactive buses
+->IsLoggedIn session storage variable -set
+
+
+limitation :1 bus 1 schedule/day
+
+
+
 
 
 

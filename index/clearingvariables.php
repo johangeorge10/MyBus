@@ -3,6 +3,7 @@ session_start(); // Start the session
 
 // Store the email in a temporary variable
 $email = isset($_SESSION['email']) ? $_SESSION['email'] : null;
+$name = isset($_SESSION['name']) ? $_SESSION['name'] : null;
 
 // Clear all session variables
 session_unset();
@@ -14,6 +15,7 @@ session_destroy();
 if ($email) {
     session_start(); // Start a new session
     $_SESSION['email'] = $email; // Restore the email
+    $_SESSION['name'] = $name;
 }
 
 // Optionally, you can return a success message or status

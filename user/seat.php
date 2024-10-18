@@ -92,7 +92,7 @@ if ($result->num_rows > 0) {
 
 // Fetch booked seats
 $bseats = [];
-$sqlBookedSeats = "SELECT seatnumber FROM booked WHERE busid='$busNumber' AND arrtime='$arrTime' AND date='$departDate'";
+$sqlBookedSeats = "SELECT seatnumber FROM booked WHERE busid='$busNumber' AND date='$departDate'";
 $resultBooked = $conn->query($sqlBookedSeats);
 if ($resultBooked->num_rows > 0) {
     while ($row = $resultBooked->fetch_assoc()) {
