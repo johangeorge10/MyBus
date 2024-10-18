@@ -44,7 +44,9 @@ $sql = "SELECT DISTINCT
             bs_from.location_name = ? AND
             bs_to.location_name = ? AND
             bs_from.stop_order < bs_to.stop_order AND
-            (DATE(NOW()) < ? OR (DATE(NOW()) = ? AND bs_from.bus_time > TIME(NOW())))";
+            (DATE(NOW()) < ? OR (DATE(NOW()) = ? AND bs_from.bus_time > TIME(NOW()))) AND
+            b.status = 'active'";
+
 
 $stmt = $conn->prepare($sql);
 
@@ -73,7 +75,8 @@ if ($result->num_rows === 0) {
                     BusInfo
                 WHERE
                     startingpoint = ? AND destination = ? AND
-                    (DATE(NOW()) < ? OR (DATE(NOW()) = ? AND arrtime > TIME(NOW())))";
+                    (DATE(NOW()) < ? OR (DATE(NOW()) = ? AND arrtime > TIME(NOW()))) AND
+                    status = 'active'";
 
     $stmt_fallback = $conn->prepare($sql_fallback);
 

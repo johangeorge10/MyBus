@@ -18,25 +18,20 @@ DONE->
 ->unavailable marking red layout issues on station to station ->DONE
 ->seat spacing in seat.php ->DONE
 ->seat booking issues with same bus with diff places -> removed constraints on arrtime ->DONE
-
+->Forgot password -phpmailer ->DONE
+->sent mail for booked info -phpmailer ->DONE
+->sent mail on refund ->DONE
+->IsLoggedIn session storage variable -set ->DONE
 
 TO DO->
 
-->sent mail for booked info -phpmailer
-->sent mail on refund
-->Forgot password -phpmailer
-
 ->BUG FIX in AdminPage , add , edit ,delete bus scheddule,autodelete bus schedule , bugs with active and inactive buses
-->IsLoggedIn session storage variable -set
-
+->Different Schedule for the Same BUS
 
 limitation :1 bus 1 schedule/day
 
 
 
 
-
-
-
 CURRENT->
-->phpmailer
+->Admin Page

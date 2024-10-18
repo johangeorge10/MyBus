@@ -4,6 +4,8 @@
       $result=$result->fetch_row()[0];
       $available=mysqli_query($conn,"select count(*) FROM businfo where status='active'");
       $available=$available->fetch_row()[0];
+      $ticketsSoldResult = mysqli_query($conn, "SELECT COUNT(*) FROM booked");
+      $ticketsSold = $ticketsSoldResult->fetch_row()[0];
 
     
     ?>
@@ -25,7 +27,7 @@
           
           <div class="summary-item">
             <span>Tickets Sold</span><br>
-            <label id="tickets-sold">0</label>
+            <label id="tickets-sold"><?php echo "$ticketsSold" ?></label>
           </div>
         </div>
       </div>
