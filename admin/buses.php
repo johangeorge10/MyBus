@@ -16,7 +16,7 @@ echo "<script> location.href='admindash.php' </script>";
 
       
 
-      <div class="internal" style="display: none;" id="in-4">
+      <div class="internal" style="display: none;" id="in-3">
         <button class="add-bus-button" onclick="showAddBusPopup()">Add Bus</button>
         <div id="add-bus" class="section">
           <table>

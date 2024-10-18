@@ -28,7 +28,7 @@ if (isset($_POST['delete'])) {
 
 ?>
 
-<div class="internal" style="display: none;" id="in-6">
+<div class="internal" style="display: none;" id="in-5">
 <button class="add-employee-button" onclick="showAddEmployeePopup()">Add Employee</button>
     <div id="add-employee" class="section">
         <table>

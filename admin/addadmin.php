@@ -22,7 +22,7 @@
 
       ?>
       
-<div class="internal"  style="display: none;" id="in-5">
+<div class="internal"  style="display: none;" id="in-4">
         <div class="centering_addadmin">   
         <form  style="color:white;" method="post" action="admindash.php">
           <div class="admin_details">

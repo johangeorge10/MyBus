@@ -102,7 +102,7 @@ if (isset($_POST['saveSchedule'])) {
 }
 ?>
 
-<div class="internal" style="display: none;" id="in-7">
+<div class="internal" style="display: none;" id="in-6">
     <h2>Bus Schedule Management</h2>
     <form method="post" action="BusSchedule.php">
         <label for="busid">Enter Bus ID:</label>
