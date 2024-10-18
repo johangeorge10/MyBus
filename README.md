@@ -14,6 +14,7 @@ DONE->
 ->redirect to checkticket | latest ticket after payment -> DONE
 ->Refund ->DONE
 ->Date bug ->DONE
+->add name in SignUP ->DONE
 
 TO DO->
 ->BUG FIX in AdminPage , add , edit ,delete bus scheddule,autodelete bus schedule , bugs with active and inactive buses
@@ -23,7 +24,7 @@ TO DO->
 ->sent mail on refund
 ->Forgot password -phpmailer
 ->seat spacing in seat.php
-->add name in SignUP
+
 
 
 

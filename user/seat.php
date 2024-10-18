@@ -164,7 +164,7 @@ $conn->close();
             if (!in_array($i, $bseats)) {
                 echo "<div class='seat' data-seat='$i' onclick='toggleSeat(this)'>$i</div>";
             } else {
-                echo "<div class='occupied'>$i</div>";
+                echo "<div class='occupied' style='margin-top: 15px;'>$i</div>";
             }
         }
         echo "</div>"; // Close the row
