@@ -1,4 +1,15 @@
 <?php
+
+// Send email notification about the refund
+require __DIR__ . '/../config.php'; // Adjust path if necessary
+require '../PHPMailer-master/src/Exception.php';
+require '../PHPMailer-master/src/PHPMailer.php';
+require '../PHPMailer-master/src/SMTP.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+
 session_start();
 
 // Check if the user is logged in
@@ -67,6 +78,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $deleteStmt->execute();
     }
 
+    $mail = new PHPMailer(true);
+    try {
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = $config["mail"]["username"];
+        $mail->Password = $config["mail"]["password"];
+        $mail->SMTPSecure = 'tls';
+        $mail->Port = 587;
+
+        $mail->setFrom($config["mail"]["username"], 'BUS MANAGEMENT SYSTEM'); // Sender's email
+        $mail->addAddress($_SESSION['email']); // Send to the user's email
+
+        // Email content
+        $mail->isHTML(true);
+        $mail->Subject = 'Refund Processed';
+        $mail->Body = "
+        <h3>Your refund of ₹" . number_format($refundableAmount, 2) . " has been processed.</h3>
+        <p>Thank you for using our service!</p>";
+
+        // Send the email
+        $mail->send();
+    } catch (Exception $e) {
+        echo "Mailer Error: {$mail->ErrorInfo}";
+    }
     // Display refund confirmation
     echo "<h3>Your refund of ₹" . number_format($refundableAmount, 2) . " has been processed. Thank you!</h3>";
     echo "<a href='../ticket/checkticket.php' class='btn btn-primary'>Exit</a>";

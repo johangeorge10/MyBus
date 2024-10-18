@@ -50,7 +50,7 @@ if (isset($_POST['forgot'])) {
         $mail->SMTPSecure = 'tls'; // Encryption
         $mail->Port = 587;
 
-        $mail->setFrom($config["mail"]["username"], 'Mail'); // Sender's email
+        $mail->setFrom($config["mail"]["username"], 'BUS MANAGEMENT SYSTEM'); // Sender's email
         $mail->addAddress($email); // Add the recipient's email
 
         // Set email format to HTML
