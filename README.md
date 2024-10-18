@@ -28,7 +28,13 @@ TO DO->
 ->BUG FIX in AdminPage , add , edit ,delete bus scheddule,autodelete bus schedule , bugs with active and inactive buses
 ->Different Schedule for the Same BUS
 
-limitation :1 bus 1 schedule/day
+limitation :
+:1 bus 1 schedule/day
+:REFRESH required for loading new added bus in buses.php
+:loading to maindash after each saving in admin pages.
+:deleted bus need 2 times to delete 
+:sussy overloaading saving in buses.php when alloted route using routing and saving it as active makes 2 bus info in the table bus info
+:Every Bus runs everyday
 
 
 

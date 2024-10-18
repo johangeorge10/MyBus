@@ -10,10 +10,12 @@ if (isset($_POST['busid']) && isset($_POST['status'])) {
     $deptime = $_POST['deptime'];
     $cost = $_POST['cost'];
     $distance = $_POST['distance'];
+    $fixCost = $_POST['fixCost'];
+    $incrementFare = $_POST['incrementFare'];
 
     // Perform the database update query for status, starting point, destination, arrival time, destination time, cost, and distance
     $conn = new mysqli("localhost", "root", "", "mydb");
-    $updateQuery = "UPDATE businfo SET status = '$status', startingpoint = '$startingpoint', destination = '$destination', arrtime = '$arrtime', deptime = '$deptime', cost = '$cost', distance = '$distance' WHERE busid = '$busid'";
+    $updateQuery = "UPDATE businfo SET status = '$status', startingpoint = '$startingpoint', destination = '$destination', arrtime = '$arrtime', deptime = '$deptime', cost = '$cost', distance = '$distance', incrementFare = '$incrementFare', fixCost = '$fixCost' WHERE busid = '$busid'";
     $updateResult = $conn->query($updateQuery);
 
     if ($updateResult) {
@@ -61,8 +63,9 @@ function getBusInfo($conn, $busid) {
         if ($result && $result->num_rows > 0) {
             echo "<h2>Bus Information Found:</h2>";
 
-            echo "<table>";
-            echo "<tr><th>BUS ID</th><th>BUS NAME</th><th>FROM_LOC</th><th>DESTINATION</th><th>ARRIVAL TIME</th><th>DESTINATION TIME</th><th>COST</th><th>DISTANCE</th><th>STATUS</th><th>ACTION</th></tr>";
+            echo '<table>';           
+            // style="margin-left: 30px;"
+            echo "<tr><th>BUS ID</th><th>BUS NAME</th><th>FROM_LOC</th><th>DESTINATION</th><th>ARRIVAL TIME</th><th>DESTINATION TIME</th><th>COST</th><th>DISTANCE</th><th>STATUS</th><th>INCREMENTFARE</th>  <th>FIXCOST</th> <th>ACTION</th></tr>";
 
             while ($row = mysqli_fetch_assoc($result)) {
                 $busid_found = $row['busid'];
@@ -74,6 +77,8 @@ function getBusInfo($conn, $busid) {
                 $cost = $row['cost'];
                 $distance = $row['distance'];
                 $status = $row['status'];
+                $incrementFare = $row['incrementFare'];
+                $fixCost = $row['fixCost'];
 
                 echo "<tr>";
                 echo "<td>" . $busid_found . "</td>";
@@ -85,6 +90,8 @@ function getBusInfo($conn, $busid) {
                 echo "<td>$" . $cost . "</td>";
                 echo "<td>" . $distance . " KM</td>";
                 echo "<td>" . $status . "</td>";
+                echo "<td>" . $incrementFare . "</td>";
+                echo "<td>" . $fixCost . "</td>";
                 echo '<td><button onclick="openModal(\'' . $busid_found . '\', \'' . $start . '\', \'' . $end . '\', \'' . $arrtime . '\', \'' . $deptime . '\', \'' . $cost . '\', \'' . $distance . '\')">Edit</button></td>'; // Edit button with onclick event to open modal
                 echo "</tr>";
             }
@@ -117,6 +124,12 @@ function getBusInfo($conn, $busid) {
             <input style="width:100%;" type="text" id="cost" name="cost" value="" required><br>
             <label for="distance">Distance (in KM):</label>
             <input style="width:100%;" type="number" id="distance" name="distance" value="" required><br>
+
+            <label for="fixCost">Fixed Cost:</label>
+            <input style="width:100%;" type="number" id="fixCost" name="fixCost" value="" required><br>
+            <label for="incrementFare">Increment Fare:</label>
+            <input style="width:100%;" type="number" id="incrementFare" name="incrementFare" value="" required><br>
+
             <label><input type="radio" name="status" value="active" id="statusInput"> Active</label><br>
             <label><input type="radio" name="status" value="not active" id="statusInput"> Not Active</label><br>
 
