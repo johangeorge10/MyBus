@@ -22,13 +22,15 @@ DONE->
 ->sent mail for booked info -phpmailer ->DONE
 ->sent mail on refund ->DONE
 ->IsLoggedIn session storage variable -set ->DONE
+->Added edit delete for bus schedule
+
 
 TO DO->
-
 ->BUG FIX in AdminPage , add , edit ,delete bus scheddule,autodelete bus schedule , bugs with active and inactive buses
 ->Different Schedule for the Same BUS
 
 limitation :
+
 :1 bus 1 schedule/day
 :REFRESH required for loading new added bus in buses.php
 :loading to maindash after each saving in admin pages.
