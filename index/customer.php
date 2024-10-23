@@ -63,11 +63,11 @@ $cost = $totalPrice/$totalSeats;
             </div>
             <div class="form-group">
               <label for="age">Age</label>
-              <input type="number" id="age" name="age" placeholder="Enter your age" required>
+              <input type="number" id="age" name="age" placeholder="Enter your age" required min="0">
             </div>
             <div class="form-group">
               <label for="phone">Phone Number</label>
-              <input type="text" id="phone" name="phone" placeholder="Enter your phone number" required>
+              <input type="text" id="phone" name="phone" placeholder="Enter your phone number" required maxlength="10" pattern="\d{10}" title="Please enter a 10-digit phone number">
             </div>
             <button type="submit">Save Information</button>
           </form>
