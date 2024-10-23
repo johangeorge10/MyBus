@@ -1,4 +1,7 @@
 # MyBus
+Start path:
+http://localhost/mybus/home/home.html
+
 pending works: 
 DONE->
 ->use browser storage for storing email | Session ->DONE
